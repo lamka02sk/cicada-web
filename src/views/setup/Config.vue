@@ -1,32 +1,36 @@
 <template>
 
-    <ScreenCenter class="h-full max-w-md w-full mx-auto">
+    <ScreenCenter class="h-full max-w-md w-full mx-auto p-2">
         
-        <Logo large="1"></Logo>
-        <h1 class="text-xl text-gray-600 my-4 uppercase">Server connection</h1>
+        <div class="px-4 py-8 md:px-8 bg-white shadow-sm rounded-md flex flex-col items-center">
+            
+            <Logo large="1"></Logo>
+            <h1 class="text-xl text-gray-600 my-4 uppercase">Server connection</h1>
+            
+            <Message type="tip" icon="tips_and_updates">
+                <template v-slot:description>
+                    To skip this step, you can define a default connection
+                    in <code>config/connection.json</code>
+                </template>
+            </Message>
+            
+            <p class="text-sm text-gray-800 text-center mb-4">Before using the cicada web UI, server connection needs to be configured on this device</p>
         
-        <Message type="tip" icon="tips_and_updates">
-            <template v-slot:description>
-                To avoid manual server connection configuration on each device, you can define a default server connection
-                in <code>config/connection.json</code>
-            </template>
-        </Message>
-        
-        <p class="text-sm text-gray-800 text-center mb-4">Before using the cicada web UI, server connection needs to be configured on this device</p>
-    
-        <Form v-if="configuration">
-            <FormRow>
-                <Select class="w-full" label="Protocol" :options="protocolOptions" v-model="configuration.protocol" @update:modelValue="changePort"></Select>
-                <Text class="w-full" label="Domain or IP address" v-model="configuration.domain"></Text>
-            </FormRow>
-            <FormRow>
-                <Number class="w-full" label="Port" v-model="configuration.port" :min="1" :max="65535" :step="1"></Number>
-                <Text class="w-full" label="Path" v-model="configuration.path"></Text>
-            </FormRow>
-            <FormRow class="justify-center">
-                <Button type="submit">Save configuration</Button>
-            </FormRow>
-        </Form>
+            <Form v-if="configuration">
+                <FormRow>
+                    <Select label="Protocol" :options="protocolOptions" v-model="configuration.protocol" @update:modelValue="changePort"></Select>
+                    <Text label="Domain or IP address" placeholder="example.com" v-model="configuration.domain"></Text>
+                </FormRow>
+                <FormRow>
+                    <Number label="Port" v-model="configuration.port" :min="1" :max="65535" :step="1"></Number>
+                    <Text label="Path" v-model="configuration.path"></Text>
+                </FormRow>
+                <FormRow :center="true">
+                    <Button type="submit">Save configuration</Button>
+                </FormRow>
+            </Form>
+            
+        </div>
         
     </ScreenCenter>
     

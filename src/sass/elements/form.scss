@@ -1,0 +1,17 @@
+input:not([type=checkbox], [type=radio]), select:not([multiple]) {
+  @apply w-full rounded shadow-sm px-2 h-9 text-sm border border-gray-300 transition duration-200;
+  @apply hover:border-gray-400;
+  @apply focus:border-indigo-500 focus:outline-none focus:shadow-lg;
+}
+
+.form-item {
+  @apply w-full px-1 mb-3;
+}
+
+.form-row {
+  @apply w-full flex flex-wrap;
+
+  &.center .form-item {
+    @apply flex justify-center;
+  }
+}

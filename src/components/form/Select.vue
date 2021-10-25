@@ -2,7 +2,7 @@
     
     <FormItem>
         <Label :id="id">{{ label }}</Label>
-        <select :id="id" v-model="modelValue" :disabled="disabled" class="w-full rounded shadow-sm px-1 h-9 text-sm" @change="updateModel">
+        <select :id="id" v-model="modelValue" :disabled="disabled" @change="updateModel">
             <template v-for="option in options">
                 <option v-if="!Array.isArray(option)" :value="option.value">{{ option.title }}</option>
                 <optgroup v-else :label="option[0]">

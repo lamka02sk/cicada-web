@@ -1,6 +1,6 @@
 <template>
 
-    <div class="flex flex-wrap w-full">
+    <div class="form-row" :class="{ center }">
         <slot></slot>
     </div>
 
@@ -9,7 +9,12 @@
 <script lang="ts">
 
     export default {
-    
+        props: ['center'],
+        setup(props: any) {
+            return {
+                center: props.center ?? false
+            }
+        }
     }
 
 </script>

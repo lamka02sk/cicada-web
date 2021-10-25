@@ -5,10 +5,16 @@
 @tailwind components;
 @tailwind utilities;
 
-:root, body, #app {
-  @apply h-full;
-}
+@import './elements/buttons';
+@import './elements/code';
+@import './elements/form';
 
-code {
-  @apply bg-opacity-60 bg-gray-100 p-1 rounded text-xs;
+@layer base {
+
+  :root, body, #app {
+    @apply h-full;
+  }
+
+
+
 }

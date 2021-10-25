@@ -2,8 +2,8 @@ module.exports = {
     mode: 'jit',
     purge: {
         mode: 'all',
-        preserveHtmlElements: false,
-        content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+        preserveHtmlElements: true,
+        content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx,scss}'],
         options: {
             keyframes: true,
             fontFace: true

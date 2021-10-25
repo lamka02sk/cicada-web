@@ -1,6 +1,6 @@
 <template>
     
-    <div class="px-1 mb-2">
+    <div class="form-item">
         <slot></slot>
     </div>
     

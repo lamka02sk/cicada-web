@@ -2,7 +2,7 @@
     
     <FormItem>
         <Label :id="id">{{ label }}</Label>
-        <input :id="id" type="number" :min="min" :max="max" :step="step" v-model="modelValue" :placeholder="placeholder" class="w-full rounded shadow-sm px-2 h-9 text-sm">
+        <input :id="id" type="number" :min="min" :max="max" :step="step" v-model="modelValue" :placeholder="placeholder">
     </FormItem>
 
 </template>

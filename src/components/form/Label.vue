@@ -1,6 +1,6 @@
 <template>
     
-    <label :for="id" class="w-full text-xs font-semibold uppercase text-gray-800">
+    <label :for="id" class="w-full px-px text-sm font-medium text-gray-800">
         <slot></slot>
     </label>
 

@@ -1,6 +1,6 @@
 <template>
     
-    <form class="-mx-1 mb-4" @submit.prevent="() => {}">
+    <form class="-mx-1 mb-4 last:mb-0" @submit.prevent="() => {}">
         <slot></slot>
     </form>
     
