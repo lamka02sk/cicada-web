@@ -1,6 +1,0 @@
-button {
-  @apply rounded h-9 bg-indigo-700 shadow px-4 mt-6 text-sm font-bold text-gray-200 transition duration-200;
-  @apply hover:bg-indigo-600 hover:text-white;
-  @apply focus:bg-indigo-800 focus:text-white focus:shadow-xl focus:outline-none;
-  @apply active:bg-indigo-800 active:text-white active:shadow-xl;
-}

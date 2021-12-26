@@ -5,16 +5,22 @@
 @tailwind components;
 @tailwind utilities;
 
-@import './elements/buttons';
-@import './elements/code';
-@import './elements/form';
-
 @layer base {
 
   :root, body, #app {
     @apply h-full;
   }
 
+}
 
+@layer components {
+
+  @import './elements/buttons';
+  @import './elements/code';
+  @import './elements/form';
+
+}
+
+@layer utilities {
 
 }

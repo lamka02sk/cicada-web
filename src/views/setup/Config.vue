@@ -1,8 +1,8 @@
 <template>
 
-    <ScreenCenter class="h-full max-w-md w-full mx-auto p-2">
+    <ScreenCenter class="h-full max-w-md w-full mx-auto px-4 py-8">
         
-        <div class="px-4 py-8 md:px-8 bg-white shadow-sm rounded-md flex flex-col items-center">
+        <div class="md:px-8 flex flex-col items-center">
             
             <Logo large="1"></Logo>
             <h1 class="text-xl text-gray-600 my-4 uppercase">Server connection</h1>

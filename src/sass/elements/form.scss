@@ -1,5 +1,5 @@
 input:not([type=checkbox], [type=radio]), select:not([multiple]) {
-  @apply w-full rounded shadow-sm px-2 h-9 text-sm border border-gray-300 transition duration-200;
+  @apply w-full rounded shadow-sm px-2 h-9 text-sm bg-white border border-gray-300 transition duration-200;
   @apply hover:border-gray-400;
   @apply focus:border-indigo-500 focus:outline-none focus:shadow-lg;
 }

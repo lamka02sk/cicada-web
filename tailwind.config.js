@@ -1,14 +1,6 @@
 module.exports = {
     mode: 'jit',
-    purge: {
-        mode: 'all',
-        preserveHtmlElements: true,
-        content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx,scss}'],
-        options: {
-            keyframes: true,
-            fontFace: true
-        }
-    },
+    content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx,scss}'],
     darkMode: false,
     theme: {
         fontFamily: {
