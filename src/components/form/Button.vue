@@ -1,13 +1,14 @@
 <template>
 
-    <FormItem>
+    <FormItem class="mt-6">
         <button :class="`${color}
-                rounded h-9 shadow px-4 mt-6 text-sm font-bold transition duration-200
+                rounded h-9 shadow px-4 text-sm font-bold transition duration-200
                 focus:shadow-xl focus:outline-none active:shadow-xl
-            `"
+            `" @click.prevent="$emit('click', value)"
             :disabled="disabled" :type="type">
             <slot></slot>
         </button>
+        <slot name="addon"></slot>
     </FormItem>
     
 </template>
@@ -17,11 +18,12 @@
     import FormItem from './FormItem.vue'
     
     export default {
-        emits: ['update:modelValue'],
+        emits: ['click'],
         components: { FormItem },
-        props: ['label', 'modelValue', 'disabled', 'type', 'color'],
+        props: ['label', 'value', 'disabled', 'type', 'color'],
         setup(props: any) {
             return {
+                value: props.value ?? '',
                 type: props.type ?? 'button',
                 color: props.color ?? 'indigo'
             }

@@ -20,7 +20,7 @@ export default {
     },
     actions: {
         pushNotification(context: any, notification: Notification) {
-            context.commit('pushNotification').notifications.push(notification);
+            context.commit('pushNotification', notification);
             notification.registerEvent('dismiss', (id: string) => context.commit('popNotification', id));
         }
     },

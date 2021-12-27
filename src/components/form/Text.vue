@@ -10,17 +10,22 @@
 <script lang="ts">
 
     import {nanoid} from "nanoid";
-    import {ref} from "vue";
+    import {ref, watch} from "vue";
     
     import Label from './Label.vue'
     import FormItem from './FormItem.vue'
 
     export default {
         components: { Label, FormItem },
+        emits: ['update:modelValue'],
         props: ['label', 'modelValue', 'type', 'placeholder'],
-        setup(props: any) {
+        setup(props: any, { emit }: any) {
             
             const uuid = ref(nanoid());
+            
+            watch(() => props.modelValue, () => {
+                emit('update:modelValue', props.modelValue);
+            })
             
             return {
                 id: uuid,

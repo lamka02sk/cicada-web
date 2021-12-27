@@ -5,11 +5,11 @@ input:not([type=checkbox], [type=radio]), select:not([multiple]) {
 }
 
 .form-item {
-  @apply w-full px-1 mb-3;
+  @apply px-1 mb-3 flex-1;
 }
 
 .form-row {
-  @apply w-full flex flex-wrap;
+  @apply w-full flex flex-wrap flex-row;
 
   &.center .form-item {
     @apply flex justify-center;
