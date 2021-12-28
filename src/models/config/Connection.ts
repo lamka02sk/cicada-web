@@ -4,6 +4,19 @@ import axios from "axios";
 export default class Connection extends Config {
 
     protected readonly resource_url: string = '/config/connection.json';
+    public readonly validator = {
+        domain: {
+            type: 'string',
+            required: true,
+            min: 3
+        },
+        port: {
+            type: 'number',
+            required: true,
+            min: 1,
+            max: 65535
+        }
+    };
 
     public protocol: string = 'http';
     public domain: string = '';

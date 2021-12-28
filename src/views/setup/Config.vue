@@ -30,10 +30,10 @@
                     <Text label="Path" v-model="configuration.path"></Text>
                 </FormRow>
                 <FormRow :center="true">
-                    <Button type="submit" @click="checkConnection">
+                    <Button type="submit" @click="checkConnection" :disabled="submitDisabled" :status-type="status.type" :status-show="status.show">
                         <slot>Save configuration</slot>
-                        <template v-slot:addon>
-                            <Loading size="xs" :show="showLoading">Connecting...</Loading>
+                        <template v-slot:status>
+                            {{ status.label }}
                         </template>
                     </Button>
                 </FormRow>
@@ -53,7 +53,6 @@
     import Logo from "./../../components/Logo.vue";
     import Message from "./../../components/notifications/Message.vue";
     import ScreenCenter from "./../../components/layout/ScreenCenter.vue";
-    import Loading from "./../../components/form/Loading.vue";
     import Form from "./../../components/form/Form.vue";
     import FormRow from "./../../components/form/FormRow.vue";
     import Select from "./../../components/form/Select.vue";
@@ -61,21 +60,29 @@
     import Number from "./../../components/form/Number.vue";
     import Button from "./../../components/form/Button.vue";
     import Connection from "../../models/config/Connection";
+    import Validator from "../../validator/Validator";
 
     export default {
-        components: { Logo, Message, ScreenCenter, Form, FormRow, Select, Text, Number, Button, Loading },
+        components: { Logo, Message, ScreenCenter, Form, FormRow, Select, Text, Number, Button },
         setup() {
             
             const store = useStore();
             const configuration = ref<Connection|null>(null);
-            const showLoading = ref<boolean>(false);
             
             watchEffect(async () => {
                 configuration.value = <Connection>await store.dispatch('config/getConnectionConfig');
             });
             
+            const submitDisabled = ref<boolean>(false);
+            const status = ref<any>({
+                type: 'error',
+                show: true,
+                label: 'Connecting'
+            });
+            
             return {
-                showLoading,
+                status,
+                submitDisabled,
                 protocolOptions: [
                     { value: 'http', title: 'http://' },
                     { value: 'https', title: 'https://' }
@@ -92,13 +99,25 @@
                         return;
                     }
                     
-                    showLoading.value = true;
-    
+                    const validator = new Validator();
+                    
+                    if(!(await validator.validate(configuration.value))) {
+                        console.log(validator.messages);
+                        alert('invalid');
+                        return;
+                    }
+                    
+                    return;
+                    
+                    status.value.show = true;
+                    submitDisabled.value = true;
+
                     const a = (await configuration.value.test())
                         ? true
                         : null;
-                    
-                    showLoading.value = false;
+
+                    // status.value.show = false;
+                    submitDisabled.value = false;
                     
                 }
             }

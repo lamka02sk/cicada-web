@@ -8,7 +8,9 @@
             :disabled="disabled" :type="type">
             <slot></slot>
         </button>
-        <slot name="addon"></slot>
+        <ButtonStatus v-if="statusType" :type="statusType" :show="statusShow ?? false">
+            <slot name="status"></slot>
+        </ButtonStatus>
     </FormItem>
     
 </template>
@@ -16,11 +18,12 @@
 <script lang="ts">
     
     import FormItem from './FormItem.vue'
+    import ButtonStatus from './ButtonStatus.vue'
     
     export default {
         emits: ['click'],
-        components: { FormItem },
-        props: ['label', 'value', 'disabled', 'type', 'color'],
+        components: { FormItem, ButtonStatus },
+        props: ['label', 'value', 'disabled', 'type', 'color', 'statusType', 'statusShow'],
         setup(props: any) {
             return {
                 value: props.value ?? '',
