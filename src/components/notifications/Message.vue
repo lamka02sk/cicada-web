@@ -21,7 +21,7 @@
             warning: ['bg-yellow-200', 'text-yellow-900', 'border-yellow-300', 'border'],
             danger: ['bg-red-200', 'text-red-900', 'border-red-300', 'border'],
             default: ['bg-gray-200', 'text-gray-800', 'border-gray-300', 'border'],
-            success: ['bg-green-200', 'text-green-900', 'border-green-300', 'border']
+            success: ['bg-emerald-200', 'text-emerald-900', 'border-emerald-300', 'border']
         };
         
         return colors[type] ?? colors.default;

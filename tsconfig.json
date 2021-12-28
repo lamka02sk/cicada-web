@@ -12,7 +12,8 @@
     "lib": ["esnext", "dom"],
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

@@ -43,6 +43,12 @@
         
     </ScreenCenter>
     
+    <Alert :show="true" type="warning">
+        <template v-slot:title>Alert</template>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias aspernatur consectetur deserunt dicta
+            eaque eius est eveniet fuga illo impedit iste libero maiores modi, praesentium provident quae ratione soluta voluptatibus?
+    </Alert>
+    
 </template>
 
 <script lang="ts">
@@ -60,10 +66,11 @@
     import Number from "./../../components/form/Number.vue";
     import Button from "./../../components/form/Button.vue";
     import Connection from "../../models/config/Connection";
+    import Alert from "../../components/notifications/Alert.vue";
     import Validator from "../../validator/Validator";
 
     export default {
-        components: { Logo, Message, ScreenCenter, Form, FormRow, Select, Text, Number, Button },
+        components: { Logo, Message, ScreenCenter, Form, FormRow, Select, Text, Number, Button, Alert },
         setup() {
             
             const store = useStore();

@@ -1,13 +1,16 @@
 import Notification from "../models/system/Notification";
+import Alert from "../models/system/Alert";
 
 interface VuexSystem {
-    notifications: Array<Notification>
+    notifications: Array<Notification>,
+    alerts: Array<Alert>
 }
 
 export default {
     namespaced: true,
     state: () => (<VuexSystem> {
-        notifications: []
+        notifications: [],
+        alerts: []
     }),
     mutations: {
         pushNotification(state: VuexSystem, notification: Notification) {
