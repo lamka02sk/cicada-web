@@ -1,6 +1,6 @@
 <template>
     
-    <div class="form-item">
+    <div class="flex flex-wrap justify-center">
         <slot></slot>
     </div>
     

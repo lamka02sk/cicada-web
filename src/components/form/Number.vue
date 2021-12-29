@@ -2,9 +2,9 @@
     
     <FormItem>
         <Label :id="id">{{ label }}</Label>
-        <div class="relative">
-            <input :id="id" type="number" :min="min" :max="max" :step="step" v-model="modelValue[name]" :placeholder="placeholder">
-            <Validation :data="modelValue" :property="name"></Validation>
+        <div class="relative w-full">
+            <input :class="hasRightPadding" :id="id" type="number" :min="min" :max="max" :step="step" v-model="modelValue[name]" :placeholder="placeholder">
+            <Validation :data="modelValue" :property="name" @validate="onValidate"></Validation>
         </div>
     </FormItem>
 
@@ -24,7 +24,8 @@
         props: ['label', 'modelValue', 'placeholder', 'min', 'max', 'step', 'name'],
         setup(props: any, { emit }: any) {
             
-            const uuid = ref(nanoid());
+            const uuid = ref<string>(nanoid());
+            const hasRightPadding = ref<string|null>(null);
     
             watch(() => props.modelValue[props.name], () => {
                 emit('update:modelValue', props.modelValue);
@@ -35,7 +36,11 @@
                 placeholder: props.placeholder ?? null,
                 min: props.min ?? null,
                 max: props.max ?? null,
-                step: props.step ?? null
+                step: props.step ?? null,
+                hasRightPadding,
+                onValidate(valid: boolean|null) {
+                    hasRightPadding.value = valid !== null ? 'has-padding-right' : null;
+                }
             }
             
         }
@@ -43,6 +48,8 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+
 
 </style>

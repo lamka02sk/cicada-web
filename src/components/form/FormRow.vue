@@ -1,6 +1,6 @@
 <template>
 
-    <div class="form-row" :class="{ center }">
+    <div class="grid grid-flow-col auto-cols-auto gap-4" :class="{ center }">
         <slot></slot>
     </div>
 

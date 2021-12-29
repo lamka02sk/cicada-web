@@ -14,12 +14,13 @@
 
 <script lang="ts">
 
-import {ref, watch} from "vue";
+    import {ref, watch} from "vue";
     import Validator from "../../validator/Validator";
 
     export default {
         props: ['data', 'property'],
-        setup(props: any) {
+        emits: ['validate'],
+        setup(props: any, { emit }: any) {
     
             const valid = ref<boolean|null>(null);
             const message = ref<string>('');
@@ -27,11 +28,13 @@ import {ref, watch} from "vue";
             const messageHeight = ref<string>('0');
             
             if(props.property in (props.data.validator ?? {})) {
-                watch(() => props.data[props.property] || props.data.validator[props.property]._listener.value, async () => {
+                watch(() => props.data[props.property] || props.data.validator[props.property]._listener, async () => {
                     
                     const validator = new Validator(props.data);
                     valid.value = await validator.validateProperty(props.property);
                     message.value = validator.messages[props.property] ?? '';
+                    
+                    emit('validate', valid.value);
                     
                     if(messageRef.value) {
                         

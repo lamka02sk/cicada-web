@@ -2,17 +2,19 @@
     
     <FormItem>
         <Label :id="id">{{ label }}</Label>
-        <select :id="id" v-model="modelValue[name]" :disabled="disabled">
-            <template v-for="option in options">
-                <option v-if="!Array.isArray(option)" :value="option.value">{{ option.title }}</option>
-                <optgroup v-else :label="option[0]">
-                    <template v-for="opt in option.slice(1)">
-                        <option :value="opt.value">{{ opt.title }}</option>
-                    </template>
-                </optgroup>
-            </template>
-        </select>
-        <Validation :data="modelValue" :property="name"></Validation>
+        <div class="relative w-full">
+            <select :class="hasRightPadding" :id="id" v-model="modelValue[name]" :disabled="disabled">
+                <template v-for="option in options">
+                    <option v-if="!Array.isArray(option)" :value="option.value">{{ option.title }}</option>
+                    <optgroup v-else :label="option[0]">
+                        <template v-for="opt in option.slice(1)">
+                            <option :value="opt.value">{{ opt.title }}</option>
+                        </template>
+                    </optgroup>
+                </template>
+            </select>
+            <Validation :data="modelValue" :property="name" @validate="onValidate"></Validation>
+        </div>
     </FormItem>
     
 </template>
@@ -33,13 +35,18 @@
         setup(props: any, { emit }: any) {
             
             const uuid = ref(nanoid());
+            const hasRightPadding = ref<string|null>(null);
     
             watch(() => props.modelValue[props.name], () => {
                 emit('update:modelValue', props.modelValue);
             })
             
             return {
-                id: uuid
+                id: uuid,
+                hasRightPadding,
+                onValidate(valid: boolean|null) {
+                    hasRightPadding.value = valid !== null ? 'has-padding-right' : null;
+                }
             }
             
         }

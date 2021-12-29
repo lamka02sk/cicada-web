@@ -13,8 +13,6 @@ export function registerGuards(router: Router) {
             return next({
                 name: 'configure_connection'
             });
-        } else {
-            return next();
         }
 
         return next();

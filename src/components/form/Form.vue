@@ -1,6 +1,6 @@
 <template>
     
-    <form class="-mx-1 mb-4 last:mb-0 w-full" @submit.prevent="() => {}">
+    <form class="mb-4 last:mb-0 grid gap-4" @submit.prevent="() => {}">
         <slot></slot>
     </form>
     

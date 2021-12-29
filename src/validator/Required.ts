@@ -8,7 +8,7 @@ export default class Required extends Validator {
             return true;
         }
 
-        this.message = `Please, fill in this field`;
+        this.message = `This field is required`;
         return false;
 
     }

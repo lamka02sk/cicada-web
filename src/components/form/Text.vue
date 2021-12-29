@@ -2,9 +2,9 @@
 
     <FormItem>
         <Label :id="id">{{ label }}</Label>
-        <div class="relative">
-            <input :id="id" :type="type" v-model="modelValue[name]" :placeholder="placeholder">
-            <Validation :data="modelValue" :property="name"></Validation>
+        <div class="relative w-full">
+            <input :class="hasRightPadding" :id="id" :type="type" v-model="modelValue[name]" :placeholder="placeholder">
+            <Validation :data="modelValue" :property="name" @validate="onValidate"></Validation>
         </div>
     </FormItem>
     
@@ -26,6 +26,7 @@
         setup(props: any, { emit }: any) {
             
             const uuid = ref(nanoid());
+            const hasRightPadding = ref<string|null>(null);
             
             watch(() => props.modelValue[props.name], () => {
                 emit('update:modelValue', props.modelValue);
@@ -34,7 +35,11 @@
             return {
                 id: uuid,
                 type: props.type ?? 'text',
-                placeholder: props.placeholder ?? null
+                placeholder: props.placeholder ?? null,
+                hasRightPadding,
+                onValidate(valid: boolean|null) {
+                    hasRightPadding.value = valid !== null ? 'has-padding-right' : null;
+                }
             }
             
         }

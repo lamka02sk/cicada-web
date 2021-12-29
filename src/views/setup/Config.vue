@@ -43,7 +43,7 @@
         
     </ScreenCenter>
     
-    <Alert v-model:show="showAlert" type="danger">
+    <Alert v-model:show="showAlert" type="danger" :close-button="false">
         <template v-slot:title>Invalid data</template>
         Please check if all fields in the form are properly filled
     </Alert>
@@ -82,8 +82,8 @@
             const showAlert = ref<boolean>(false);
             const submitDisabled = ref<boolean>(false);
             const status = ref<any>({
-                type: 'error',
-                show: true,
+                type: 'loading',
+                show: false,
                 label: 'Connecting'
             });
             
@@ -107,23 +107,21 @@
                         return;
                     }
                     
+                    submitDisabled.value = true;
                     const validator = new Validator(configuration.value);
 
                     if(!(await validator.validate())) {
                         showAlert.value = true;
+                        submitDisabled.value = false;
                         return;
                     }
                     
-                    return;
-                    
                     status.value.show = true;
-                    submitDisabled.value = true;
+                    // const a = (await configuration.value.test())
+                    //     ? true
+                    //     : null;
 
-                    const a = (await configuration.value.test())
-                        ? true
-                        : null;
-
-                    // status.value.show = false;
+                    status.value.show = false;
                     submitDisabled.value = false;
                     
                 }

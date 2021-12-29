@@ -13,7 +13,6 @@ export default class Connection extends Config {
         },
         port: {
             type: 'number',
-            required: true,
             min: 1,
             max: 65535
         }

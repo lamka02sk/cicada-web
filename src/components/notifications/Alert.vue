@@ -2,16 +2,18 @@
 
     <teleport to="#alert">
     
-        <Overlay :show="show" @click="$emit('update:show', false)">
+        <Overlay :show="show" @click="(closeOverlay ?? true) ? $emit('update:show', false) : () => {}">
             <div @click.stop="() => {}" :class="`bg-white rounded-lg shadow-2xl max-w-sm w-full p-8 text-sm text-gray-800 duration-500 relative ${showClasses} ${border}`">
-                <span class="material-icons-outlined cursor-pointer absolute top-4 right-4 text-gray-500 hover:text-red-600 duration-150" @click="$emit('update:show', false)">cancel</span>
+                <span class="material-icons-outlined cursor-pointer absolute top-4 right-4 text-gray-500 hover:text-red-600 duration-150"
+                      v-if="closeButton ?? true" @click="$emit('update:show', false)">cancel</span>
                 <h2 :class="`text-xl font-semibold mb-4 pr-4 ${textColor}`">
                     <span class="material-icons-outlined align-middle mr-2" v-if="iconName">{{ iconName }}</span>
                     <span class="align-middle"><slot name="title"></slot></span>
                 </h2>
                 <slot></slot>
-                <div class="mt-4 flex justify-between">
+                <div class="flex justify-between">
                     <slot name="actions"></slot>
+                    <Button color="gray" v-if="showDefaultAction" @click="$emit('update:show', false)">OK</Button>
                 </div>
             </div>
         </Overlay>
@@ -24,6 +26,8 @@
     
     import Overlay from "../layout/Overlay.vue";
     import {ref, watchEffect} from "vue";
+    
+    import Button from "../form/Button.vue";
 
     function getBorder(type: string) {
     
@@ -72,9 +76,9 @@
 
     export default {
         emits: ['update:show'],
-        components: { Overlay },
-        props: ['show', 'type', 'icon'],
-        setup(props: any) {
+        components: { Overlay, Button },
+        props: ['show', 'type', 'closeButton', 'closeOverlay'],
+        setup(props: any, { slots }: any) {
         
             const showClasses = ref<string>('');
             const border = ref<string>('');
@@ -94,6 +98,7 @@
             })
             
             return {
+                showDefaultAction: !slots.actions,
                 showClasses,
                 border,
                 iconName,

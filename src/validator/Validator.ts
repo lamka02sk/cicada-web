@@ -19,7 +19,7 @@ export default class Validator {
 
         for(const property in this.definition.validator) {
             isValid = await this.validateProperty(property, isValid);
-            Reflect.set(this.definition.validator[property]._listener, 'value', this.definition.validator[property]._listener.value + 1);
+            Reflect.set(this.definition.validator[property], '_listener', this.definition.validator[property]._listener + 1);
         }
 
         return isValid;
