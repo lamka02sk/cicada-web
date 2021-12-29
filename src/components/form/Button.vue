@@ -46,5 +46,9 @@
         @apply text-gray-200;
         @apply bg-gray-600 hover:bg-gray-500 focus:bg-gray-700 active:bg-gray-700;
     }
+    
+    button[disabled] {
+        @apply pointer-events-none opacity-50;
+    }
 
 </style>

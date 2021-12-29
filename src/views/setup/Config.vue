@@ -31,7 +31,7 @@
                 </FormRow>
                 <FormRow :center="true">
                     <Button type="submit" @click="checkConnection" :disabled="submitDisabled" :status-type="status.type" :status-show="status.show">
-                        <slot>Save configuration</slot>
+                        <slot>Check connection</slot>
                         <template v-slot:status>
                             {{ status.label }}
                         </template>
@@ -81,11 +81,7 @@
             
             const showAlert = ref<boolean>(false);
             const submitDisabled = ref<boolean>(false);
-            const status = ref<any>({
-                type: 'loading',
-                show: false,
-                label: 'Connecting'
-            });
+            const status = ref<any>({});
             
             return {
                 showAlert,
@@ -116,13 +112,29 @@
                         return;
                     }
                     
-                    status.value.show = true;
-                    // const a = (await configuration.value.test())
-                    //     ? true
-                    //     : null;
-
-                    status.value.show = false;
-                    submitDisabled.value = false;
+                    status.value = {
+                        type: 'loading',
+                        show: true,
+                        label: 'Connecting'
+                    };
+                    
+                    if(await configuration.value.test()) {
+                        setTimeout(() => {
+                            status.value = {};
+                        }, 2000)
+                        
+                    } else {
+                        setTimeout(() => {
+                        status.value = {
+                            type: 'error',
+                            show: true,
+                            label: 'Connection failed'
+                        }
+                            submitDisabled.value = false;
+                        }, 2000)
+                    }
+                    
+                    
                     
                 }
             }
