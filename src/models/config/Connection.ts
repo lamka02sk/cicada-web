@@ -1,10 +1,11 @@
 import Config from "./Config";
 import axios from "axios";
+import rules from "../../validator/Rules";
 
 export default class Connection extends Config {
 
     protected readonly resource_url: string = '/config/connection.json';
-    public readonly validator = {
+    public readonly validator = rules({
         domain: {
             type: 'string',
             required: true,
@@ -16,7 +17,7 @@ export default class Connection extends Config {
             min: 1,
             max: 65535
         }
-    };
+    });
 
     public protocol: string = 'http';
     public domain: string = '';

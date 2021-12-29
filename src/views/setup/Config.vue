@@ -18,16 +18,16 @@
         
             <Form v-if="configuration">
                 <FormRow>
-                    <Select label="Protocol" :options="protocolOptions" v-model="configuration.protocol" @update:modelValue="changePort"></Select>
+                    <Select label="Protocol" :options="protocolOptions" name="protocol" v-model="configuration" @update:modelValue="changePort"></Select>
                 </FormRow>
                 <FormRow>
-                    <Text label="Domain or IP address" placeholder="example.com" v-model="configuration.domain"></Text>
+                    <Text label="Domain or IP address" placeholder="example.com" name="domain" v-model="configuration"></Text>
                 </FormRow>
                 <FormRow>
-                    <Number label="Port" v-model="configuration.port" :min="1" :max="65535" :step="1"></Number>
+                    <Number label="Port" name="port" v-model="configuration" :min="1" :max="65535" :step="1"></Number>
                 </FormRow>
                 <FormRow>
-                    <Text label="Path" v-model="configuration.path"></Text>
+                    <Text label="Path" name="path" v-model="configuration"></Text>
                 </FormRow>
                 <FormRow :center="true">
                     <Button type="submit" @click="checkConnection" :disabled="submitDisabled" :status-type="status.type" :status-show="status.show">
@@ -43,10 +43,9 @@
         
     </ScreenCenter>
     
-    <Alert :show="true" type="warning">
-        <template v-slot:title>Alert</template>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias aspernatur consectetur deserunt dicta
-            eaque eius est eveniet fuga illo impedit iste libero maiores modi, praesentium provident quae ratione soluta voluptatibus?
+    <Alert v-model:show="showAlert" type="danger">
+        <template v-slot:title>Invalid data</template>
+        Please check if all fields in the form are properly filled
     </Alert>
     
 </template>
@@ -80,6 +79,7 @@
                 configuration.value = <Connection>await store.dispatch('config/getConnectionConfig');
             });
             
+            const showAlert = ref<boolean>(false);
             const submitDisabled = ref<boolean>(false);
             const status = ref<any>({
                 type: 'error',
@@ -88,6 +88,7 @@
             });
             
             return {
+                showAlert,
                 status,
                 submitDisabled,
                 protocolOptions: [
@@ -95,9 +96,9 @@
                     { value: 'https', title: 'https://' }
                 ],
                 configuration,
-                changePort(value: string) {
-                    if(configuration.value) {
-                        configuration.value.port = value === 'http' ? 80 : 443;
+                changePort(value: Connection|null) {
+                    if(configuration.value && value) {
+                        configuration.value.port = value.protocol === 'http' ? 80 : 443;
                     }
                 },
                 async checkConnection() {
@@ -106,11 +107,10 @@
                         return;
                     }
                     
-                    const validator = new Validator();
-                    
-                    if(!(await validator.validate(configuration.value))) {
-                        console.log(validator.messages);
-                        alert('invalid');
+                    const validator = new Validator(configuration.value);
+
+                    if(!(await validator.validate())) {
+                        showAlert.value = true;
                         return;
                     }
                     

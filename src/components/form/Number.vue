@@ -2,7 +2,10 @@
     
     <FormItem>
         <Label :id="id">{{ label }}</Label>
-        <input :id="id" type="number" :min="min" :max="max" :step="step" v-model="modelValue" :placeholder="placeholder">
+        <div class="relative">
+            <input :id="id" type="number" :min="min" :max="max" :step="step" v-model="modelValue[name]" :placeholder="placeholder">
+            <Validation :data="modelValue" :property="name"></Validation>
+        </div>
     </FormItem>
 
 </template>
@@ -14,15 +17,16 @@
     
     import Label from './Label.vue'
     import FormItem from './FormItem.vue'
+    import Validation from "./Validation.vue"
 
     export default {
-        components: { Label, FormItem },
-        props: ['label', 'modelValue', 'placeholder', 'min', 'max', 'step'],
+        components: { Label, FormItem, Validation },
+        props: ['label', 'modelValue', 'placeholder', 'min', 'max', 'step', 'name'],
         setup(props: any, { emit }: any) {
             
             const uuid = ref(nanoid());
     
-            watch(() => props.modelValue, () => {
+            watch(() => props.modelValue[props.name], () => {
                 emit('update:modelValue', props.modelValue);
             })
             
