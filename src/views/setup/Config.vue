@@ -119,19 +119,33 @@
                     };
                     
                     if(await configuration.value.test()) {
+                        
                         setTimeout(() => {
-                            status.value = {};
-                        }, 2000)
+    
+                            status.value = {
+                                type: 'success',
+                                show: true,
+                                label: 'Successfully connected'
+                            }
+                            
+                            // TODO > Redirect to login
+                            
+                        }, 500)
                         
                     } else {
+                        
                         setTimeout(() => {
-                        status.value = {
-                            type: 'error',
-                            show: true,
-                            label: 'Connection failed'
-                        }
+                            
+                            status.value = {
+                                type: 'error',
+                                show: true,
+                                label: 'Connection failed'
+                            }
+                            
                             submitDisabled.value = false;
-                        }, 2000)
+                            
+                        }, 500)
+                        
                     }
                     
                     
