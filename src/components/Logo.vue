@@ -1,6 +1,6 @@
 <template>
     
-    <div class="logo font-brand text-gray-600" :class="large">cicada</div>
+    <div class="logo font-brand text-gray-600 text-center" :class="large">cicada</div>
     
 </template>
 

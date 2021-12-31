@@ -1,7 +1,9 @@
 <template>
 
-    <div class="flex flex-col items-center justify-center">
-        <slot></slot>
+    <div class="grid place-items-center">
+        <div>
+            <slot></slot>
+        </div>
     </div>
     
 </template>

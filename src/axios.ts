@@ -4,10 +4,26 @@ import Notification from "./models/system/Notification";
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+axios.interceptors.request.use(
+    config => {
+
+        const connectionConfig = store.getters['config/connectionConfig'] ?? null;
+
+        if(!connectionConfig) {
+            return config;
+        }
+
+        config.baseURL = connectionConfig.getUrl();
+        return config;
+
+    }, error => {
+
+    }
+);
+
 axios.interceptors.response.use(response => {
     return response;
 }, error => {
-    console.log(error);
     const notification = new Notification('error', 'Request failed', error, 10);
     store.dispatch('system/pushNotification', notification);
 });

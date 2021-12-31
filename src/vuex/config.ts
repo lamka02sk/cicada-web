@@ -2,17 +2,17 @@ import axios from 'axios'
 import Connection from "../models/config/Connection"
 
 interface VuexConfig {
-    system: Connection
+    connection: Connection
 }
 
 export default {
     namespaced: true,
     state: () => (<VuexConfig> {
-        system: new Connection
+        connection: new Connection
     }),
     mutations: {
         setConnectionValidity(state: any, valid: boolean) {
-            state.system._valid = valid;
+            state.connection._valid = valid;
         }
     },
     actions: {
@@ -28,7 +28,7 @@ export default {
     },
     getters: {
         connectionConfig(state: VuexConfig) : Connection {
-            return state.system;
+            return state.connection;
         }
     }
 }

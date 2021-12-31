@@ -1,45 +1,41 @@
 <template>
 
-    <ScreenCenter class="h-full max-w-md w-full mx-auto px-4 py-8">
+    <ScreenCenter class="h-full max-w-md w-full mx-auto md:px-12 px-4 py-8">
         
-        <div class="md:px-8 flex flex-col items-center">
-            
-            <Logo large="1"></Logo>
-            <h1 class="text-xl text-gray-600 my-4 uppercase">Server connection</h1>
-            
-            <Message type="tip" icon="tips_and_updates">
-                <template v-slot:description>
-                    To skip this step, you can define a default connection
-                    in <code>config/connection.json</code>
-                </template>
-            </Message>
-            
-            <p class="text-sm text-gray-800 text-center mb-4">Before using the cicada web UI, server connection needs to be configured on this device</p>
+        <Logo large="1"></Logo>
+        <h1 class="text-xl text-gray-600 my-4 uppercase text-center">Server connection</h1>
         
-            <Form v-if="configuration">
-                <FormRow>
-                    <Select label="Protocol" :options="protocolOptions" name="protocol" v-model="configuration" @update:modelValue="changePort"></Select>
-                </FormRow>
-                <FormRow>
-                    <Text label="Domain or IP address" placeholder="example.com" name="domain" v-model="configuration"></Text>
-                </FormRow>
-                <FormRow>
-                    <Number label="Port" name="port" v-model="configuration" :min="1" :max="65535" :step="1"></Number>
-                </FormRow>
-                <FormRow>
-                    <Text label="Path" name="path" v-model="configuration"></Text>
-                </FormRow>
-                <FormRow :center="true">
-                    <Button type="submit" @click="checkConnection" :disabled="submitDisabled" :status-type="status.type" :status-show="status.show">
-                        <slot>Check connection</slot>
-                        <template v-slot:status>
-                            {{ status.label }}
-                        </template>
-                    </Button>
-                </FormRow>
-            </Form>
-            
-        </div>
+        <Message type="tip" icon="tips_and_updates">
+            <template v-slot:description>
+                To skip this step, you can define a default connection
+                in <code>config/connection.json</code>
+            </template>
+        </Message>
+        
+        <p class="text-sm text-gray-800 text-center mb-4">Before using the cicada web UI, server connection needs to be configured on this device</p>
+    
+        <Form v-if="configuration">
+            <FormRow>
+                <Select label="Protocol" :options="protocolOptions" name="protocol" v-model="configuration" @update:modelValue="changePort"></Select>
+            </FormRow>
+            <FormRow>
+                <Text label="Domain or IP address" placeholder="example.com" name="domain" v-model="configuration"></Text>
+            </FormRow>
+            <FormRow>
+                <Number label="Port" name="port" v-model="configuration" :min="1" :max="65535" :step="1"></Number>
+            </FormRow>
+            <FormRow>
+                <Text label="Path" name="path" v-model="configuration"></Text>
+            </FormRow>
+            <FormRow :center="true">
+                <Button type="submit" @click="checkConnection" :disabled="submitDisabled" :status-type="status.type" :status-show="status.show">
+                    <slot>Check connection</slot>
+                    <template v-slot:status>
+                        {{ status.label }}
+                    </template>
+                </Button>
+            </FormRow>
+        </Form>
         
     </ScreenCenter>
     
@@ -134,7 +130,7 @@
                             
                             store.commit('config/setConnectionValidity', true);
                             await store.dispatch('config/saveConnectionConfig');
-                            await router.push('login');
+                            await router.push({ name: 'auth_login' });
                             
                         }, 500)
                         

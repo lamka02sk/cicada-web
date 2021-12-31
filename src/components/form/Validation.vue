@@ -27,8 +27,8 @@
             const messageRef = ref<HTMLElement|null>(null);
             const messageHeight = ref<string>('0');
             
-            if(props.property in (props.data.validator ?? {})) {
-                watch(() => props.data[props.property] || props.data.validator[props.property]._listener, async () => {
+            if(props.property in (props.data._validator ?? {})) {
+                watch(() => props.data[props.property] || props.data._validator[props.property]._listener, async () => {
                     
                     const validator = new Validator(props.data);
                     valid.value = await validator.validateProperty(props.property);

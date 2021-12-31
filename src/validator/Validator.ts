@@ -11,15 +11,15 @@ export default class Validator {
 
     public async validate() : Promise<boolean> {
 
-        if(typeof this.definition.validator !== 'object') {
+        if(typeof this.definition._validator !== 'object') {
             return true;
         }
 
         let isValid = true;
 
-        for(const property in this.definition.validator) {
+        for(const property in this.definition._validator) {
             isValid = await this.validateProperty(property, isValid);
-            Reflect.set(this.definition.validator[property], '_listener', this.definition.validator[property]._listener + 1);
+            Reflect.set(this.definition._validator[property], '_listener', this.definition._validator[property]._listener + 1);
         }
 
         return isValid;
@@ -28,7 +28,7 @@ export default class Validator {
 
     public async validateProperty(property: string, isValid = true) {
 
-        for(const validator in this.definition.validator[property]) {
+        for(const validator in this.definition._validator[property]) {
 
             if(validator === '_listener') {
                 continue;
@@ -36,7 +36,7 @@ export default class Validator {
 
             // @ts-ignore
             const vClass = await import('./' + validator.replace(/(^|\s)\S/g, c => c.toUpperCase()));
-            const v: any = new (vClass.default)(this.definition.validator[property][validator]);
+            const v: any = new (vClass.default)(this.definition._validator[property][validator]);
 
             if(!v.isValid(this.definition[property])) {
                 this.messages[property] = v.getMessage();

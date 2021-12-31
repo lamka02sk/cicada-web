@@ -8,12 +8,18 @@ export function registerGuards(router: Router) {
 
         // Check configuration availability
         const configuration: Connection = await store.dispatch('config/getConnectionConfig');
+        const validConfiguration = await configuration.test();
+
+        if(validConfiguration) {
+
+            // Redirect to login from configuration
+            if(to.name === 'configure_connection') {
+                return next({name: 'auth_login'});
+            }
 
         // Force configuration route
-        if(!(await configuration.test()) && (!to.name || to.name !== 'configure_connection')) {
-            return next({
-                name: 'configure_connection'
-            });
+        } else if(to.name !== 'configure_connection') {
+            return next({ name: 'configure_connection' });
         }
 
         return next();
