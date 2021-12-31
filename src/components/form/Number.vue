@@ -2,7 +2,7 @@
     
     <FormItem>
         <Label :id="id">{{ label }}</Label>
-        <div class="relative w-full">
+        <div class="relative w-full h-full">
             <input :class="hasRightPadding" :id="id" type="number" :min="min" :max="max" :step="step" v-model="modelValue[name]" :placeholder="placeholder">
             <Validation :data="modelValue" :property="name" @validate="onValidate"></Validation>
         </div>

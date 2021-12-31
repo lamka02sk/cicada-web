@@ -38,7 +38,7 @@ export default class Validator {
             const vClass = await import('./' + validator.replace(/(^|\s)\S/g, c => c.toUpperCase()));
             const v: any = new (vClass.default)(this.definition._validator[property][validator]);
 
-            if(!v.isValid(this.definition[property])) {
+            if(!v.isValid(this.definition[property], this.definition)) {
                 this.messages[property] = v.getMessage();
                 isValid = false;
                 break;

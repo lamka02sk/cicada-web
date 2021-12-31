@@ -7,17 +7,27 @@ import Register from "../views/auth/Register.vue";
 export default [
     <RouteRecordRaw> {
         name: 'configure_connection',
-        path: '/configure',
-        component: Config
+        path: '/server-connection',
+        component: Config,
+        meta: {
+            title: 'Server connection'
+        }
     },
     <RouteRecordRaw> {
         name: 'auth_login',
         path: '/',
-        component: Login
+        component: Login,
+        alias: '/login',
+        meta: {
+            title: 'Login'
+        }
     },
     <RouteRecordRaw> {
         name: 'auth_register',
-        path: '/register',
-        component: Register
+        path: '/create-admin-account',
+        component: Register,
+        meta: {
+            title: 'Create admin account'
+        }
     }
 ]
