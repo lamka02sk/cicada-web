@@ -67,13 +67,17 @@
     import Connection from "../../models/config/Connection";
     import Alert from "../../components/notifications/Alert.vue";
     import Validator from "../../validator/Validator";
+    import {useRouter} from "vue-router";
 
     export default {
         components: { Logo, Message, ScreenCenter, Form, FormRow, Select, Text, Number, Button, Alert },
         setup() {
             
             const store = useStore();
+            const router = useRouter();
             const configuration = ref<Connection|null>(null);
+            
+            store.commit('config/setConnectionValidity', false);
             
             watchEffect(async () => {
                 configuration.value = <Connection>await store.dispatch('config/getConnectionConfig');
@@ -120,7 +124,7 @@
                     
                     if(await configuration.value.test()) {
                         
-                        setTimeout(() => {
+                        setTimeout(async () => {
     
                             status.value = {
                                 type: 'success',
@@ -128,7 +132,9 @@
                                 label: 'Successfully connected'
                             }
                             
-                            // TODO > Redirect to login
+                            store.commit('config/setConnectionValidity', true);
+                            await store.dispatch('config/saveConnectionConfig');
+                            await router.push('login');
                             
                         }, 500)
                         
