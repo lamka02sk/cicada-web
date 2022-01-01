@@ -28,7 +28,14 @@
             const messageHeight = ref<string>('0');
             
             if(props.property in (props.data._validator ?? {})) {
-                watch(() => props.data[props.property] || props.data._validator[props.property]._listener, async () => {
+    
+                const equals = [props.property];
+    
+                if(props.data._validator[props.property].equals) {
+                    equals.push(props.data._validator[props.property].equals);
+                }
+                
+                watch(() => equals.map(e => props.data[e]) || props.data._validator[props.property]._listener, async () => {
                     
                     const validator = new Validator(props.data);
                     valid.value = await validator.validateProperty(props.property);

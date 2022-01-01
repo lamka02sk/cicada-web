@@ -10,20 +10,20 @@
         <Form v-if="formData">
             
             <FormRow>
-                <Text label="E-mail" name="email" type="email" placeholder="admin@cicada.cc" v-model="formData" required="1"></Text>
+                <Text label="E-mail" name="email" type="email" placeholder="admin@cicada.cc" v-model="formData" required="1" autocomplete="email"></Text>
             </FormRow>
     
             <FormRow>
-                <Text label="First name" name="firstname" placeholder="John" v-model="formData" required="1"></Text>
-                <Text label="Last name" name="lastname" placeholder="Doe" v-model="formData" required="1"></Text>
+                <Text label="First name" name="firstname" placeholder="John" v-model="formData" required="1" autocomplete="given-name"></Text>
+                <Text label="Last name" name="lastname" placeholder="Doe" v-model="formData" required="1" autocomplete="family-name"></Text>
             </FormRow>
     
             <FormRow>
-                <Password label="Password" name="password" placeholder="********" v-model="formData" strength="1" required="1"></Password>
+                <Password label="Password" name="password" placeholder="********" v-model="formData" required="1" autocomplete="new-password"></Password>
             </FormRow>
     
             <FormRow>
-                <Password label="Repeat password" name="password_repeat" placeholder="********" v-model="formData"></Password>
+                <Password label="Repeat password" name="password_repeat" placeholder="********" v-model="formData" autocomplete="new-password"></Password>
             </FormRow>
             
             <FormRow :center="true">

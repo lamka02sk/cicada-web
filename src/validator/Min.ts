@@ -13,7 +13,7 @@ export default class Min extends Validator {
         if(typeof value === 'number') {
             this.message = `Number cannot be lower than ${this.definition}`;
         } else if(typeof value === 'string') {
-            this.message = `Text must be at least ${this.definition} characters long`;
+            this.message = `Field must be at least ${this.definition} characters long`;
         }
 
         return false;

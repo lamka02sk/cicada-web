@@ -13,7 +13,7 @@ export default class Max extends Validator {
         if(typeof value === 'number') {
             this.message = `Number cannot be higher than ${this.definition}`;
         } else if(typeof value === 'string') {
-            this.message = `Text must be less than ${this.definition} characters long`;
+            this.message = `Field must be less than ${this.definition} characters long`;
         }
 
         return false;
