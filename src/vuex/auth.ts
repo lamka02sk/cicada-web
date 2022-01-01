@@ -16,7 +16,7 @@ export default {
         session: null
     }),
     mutations: {
-        setSession(state: VuexAuth, session: Session) {
+        setSession(state: VuexAuth, session: Session|null) {
             state.session = session;
         }
     },
@@ -45,7 +45,8 @@ export default {
                 context.commit('setSession', session);
                 return true;
             } else if(loginForm.isEmpty()) {
-                Session.logout();
+                Session.forceLogout();
+                return false;
             }
 
             const response = await loginForm.login();
@@ -64,6 +65,18 @@ export default {
 
             return response;
 
+        },
+        async logout(context: any) {
+
+            const session = context.getters.getSession;
+
+            if(!session) {
+                return true;
+            }
+
+            context.commit('setSession', null);
+            return await session.logout();
+
         }
     },
     getters: {
@@ -75,6 +88,9 @@ export default {
         },
         hasSession(state: VuexAuth) : boolean {
             return state.session !== null && state.session.isActive();
+        },
+        getSession(state: VuexAuth) : Session|null {
+            return state.session;
         }
     }
 }

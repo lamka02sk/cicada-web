@@ -6,7 +6,7 @@ export default class Session extends Auth {
     private static _ls_key: string = 'session_token';
 
     private active: boolean = false;
-    private token: string|null = null;
+    private readonly token: string|null = null;
 
     public constructor(token: string) {
 
@@ -37,7 +37,12 @@ export default class Session extends Auth {
         return this.active;
     }
 
-    public static logout() {
+    public async logout() {
+        Session.forceLogout();
+        return axios.post(`/auth/logout`, this.asObject());
+    }
+
+    public static forceLogout() {
         localStorage.removeItem(Session._ls_key);
     }
 
