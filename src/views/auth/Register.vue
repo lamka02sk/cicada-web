@@ -10,16 +10,16 @@
         <Form v-if="formData">
             
             <FormRow>
-                <Text label="E-mail" name="email" type="email" placeholder="admin@cicada.cc" v-model="formData"></Text>
+                <Text label="E-mail" name="email" type="email" placeholder="admin@cicada.cc" v-model="formData" required="1"></Text>
             </FormRow>
     
             <FormRow>
-                <Text label="First name" name="firstname" placeholder="John" v-model="formData"></Text>
-                <Text label="Last name" name="lastname" placeholder="Doe" v-model="formData"></Text>
+                <Text label="First name" name="firstname" placeholder="John" v-model="formData" required="1"></Text>
+                <Text label="Last name" name="lastname" placeholder="Doe" v-model="formData" required="1"></Text>
             </FormRow>
     
             <FormRow>
-                <Password label="Password" name="password" placeholder="********" v-model="formData" strength="1"></Password>
+                <Password label="Password" name="password" placeholder="********" v-model="formData" strength="1" required="1"></Password>
             </FormRow>
     
             <FormRow>

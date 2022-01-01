@@ -5,6 +5,7 @@
         <div class="relative w-full h-full">
             <input :class="hasRightPadding" :id="id" :type="type" v-model="modelValue[name]" :placeholder="placeholder">
             <Validation :data="modelValue" :property="name" @validate="onValidate"></Validation>
+            <RequiredIndicator v-bind="{ required, modelValue }"></RequiredIndicator>
         </div>
     </FormItem>
     
@@ -18,11 +19,12 @@
     import Label from './Label.vue'
     import FormItem from './FormItem.vue'
     import Validation from "./Validation.vue"
+    import RequiredIndicator from "./RequiredIndicator.vue";
 
     export default {
-        components: { Label, FormItem, Validation },
+        components: { Label, FormItem, Validation, RequiredIndicator },
         emits: ['update:modelValue'],
-        props: ['label', 'modelValue', 'type', 'placeholder', 'name'],
+        props: ['label', 'modelValue', 'type', 'placeholder', 'name', 'required'],
         setup(props: any, { emit }: any) {
             
             const uuid = ref(nanoid());

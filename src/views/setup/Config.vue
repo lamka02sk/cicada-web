@@ -19,13 +19,13 @@
                 <Select label="Protocol" :options="protocolOptions" name="protocol" v-model="configuration" @update:modelValue="changePort"></Select>
             </FormRow>
             <FormRow>
-                <Text label="Domain or IP address" placeholder="example.com" name="domain" v-model="configuration"></Text>
+                <Text label="Domain or IP address" placeholder="example.com" name="domain" v-model="configuration" required="1"></Text>
             </FormRow>
             <FormRow>
-                <Number label="Port" name="port" v-model="configuration" :min="1" :max="65535" :step="1"></Number>
+                <Number label="Port" name="port" v-model="configuration" :min="1" :max="65535" :step="1" required="1"></Number>
             </FormRow>
             <FormRow>
-                <Text label="Path" name="path" v-model="configuration"></Text>
+                <Text label="Path" name="path" v-model="configuration" required="1"></Text>
             </FormRow>
             <FormRow :center="true">
                 <Button type="submit" @click="checkConnection" :disabled="submitDisabled" :status-type="status.type" :status-show="status.show">
