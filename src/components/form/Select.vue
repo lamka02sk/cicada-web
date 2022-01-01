@@ -13,7 +13,7 @@
                     </optgroup>
                 </template>
             </select>
-            <Validation :data="modelValue" :property="name" @validate="onValidate"></Validation>
+            <Validation :data="modelValue" :property="name" @validate="onValidate" :novalidate="novalidate"></Validation>
         </div>
     </FormItem>
     
@@ -31,7 +31,7 @@
     export default {
         emits: ['update:modelValue'],
         components: { Label, FormItem, Validation },
-        props: ['label', 'modelValue', 'disabled', 'options', 'name'],
+        props: ['label', 'modelValue', 'disabled', 'options', 'name', 'novalidate'],
         setup(props: any, { emit }: any) {
             
             const uuid = ref(nanoid());

@@ -25,6 +25,11 @@ export function registerGuards(router: Router) {
             return next({ name: 'configure_connection' });
         }
 
+        // Authenticate
+        if(to.meta?.auth && !(await store.dispatch('auth/signIn'))) {
+            return next({ name: 'auth_login' });
+        }
+
         // Set route title
         document.title = `${to.meta.title ?? ''}${to.meta.title ? ' | ' : ''}${BASE_TITLE}`;
 

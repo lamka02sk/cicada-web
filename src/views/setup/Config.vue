@@ -12,7 +12,7 @@
             </template>
         </Message>
         
-        <p class="text-sm text-gray-800 text-center mb-4">Before using the cicada web UI, server connection needs to be configured on this device</p>
+        <p class="text-sm text-gray-800 text-center mb-6">Before using the cicada web UI, server connection needs to be configured on this device</p>
     
         <Form v-if="configuration" @submit="checkConnection">
             <FormRow>

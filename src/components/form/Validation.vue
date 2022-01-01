@@ -18,7 +18,7 @@
     import Validator from "../../validator/Validator";
 
     export default {
-        props: ['data', 'property'],
+        props: ['data', 'property', 'novalidate'],
         emits: ['validate'],
         setup(props: any, { emit }: any) {
     
@@ -29,10 +29,16 @@
             
             if(props.property in (props.data._validator ?? {})) {
     
-                const equals = [props.property];
+                let equals: Array<string> = [];
+                
+                if(!props.novalidate) {
     
-                if(props.data._validator[props.property].equals) {
-                    equals.push(props.data._validator[props.property].equals);
+                    equals = [props.property];
+    
+                    if(props.data._validator[props.property].equals) {
+                        equals.push(props.data._validator[props.property].equals);
+                    }
+    
                 }
                 
                 watch(() => [equals.map(e => props.data[e]), props.data._validator[props.property]._listener], async () => {

@@ -17,9 +17,8 @@ export default [
         name: 'auth_login',
         path: '/',
         component: Login,
-        alias: '/login',
         meta: {
-            title: 'Login'
+            title: 'Sign in'
         }
     },
     <RouteRecordRaw> {

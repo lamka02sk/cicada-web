@@ -5,7 +5,7 @@
         <Logo large="1"></Logo>
         <h1 class="text-xl text-gray-600 my-4 uppercase text-center">Create admin account</h1>
         
-        <p class="text-sm text-gray-800 text-center mb-4">This account will be the main account with full access to all settings and deployment options</p>
+        <p class="text-sm text-gray-800 text-center mb-6">This account will be the main account with full access to all settings and deployment options</p>
         
         <Form v-if="formData" @submit="createAccount">
             
@@ -107,30 +107,34 @@
                         show: true,
                         label: 'Creating account'
                     };
-        
-                    const response = await store.dispatch('auth/createAccount');
                     
-                    if(response?.data?.success) {
+                    setTimeout(async () => {
     
-                        status.value = {
-                            type: 'success',
-                            show: true,
-                            label: 'Account was created'
-                        };
-                        
-                        await router.push({ name: 'auth_login' });
-                        
-                    } else {
-                        
-                        submitDisabled.value = false;
+                        const response = await store.dispatch('auth/createAccount');
     
-                        status.value = {
-                            type: 'error',
-                            show: true,
-                            label: 'Failed to create account'
-                        };
-                        
-                    }
+                        if(response?.data?.success) {
+        
+                            status.value = {
+                                type: 'success',
+                                show: true,
+                                label: 'Account was created'
+                            };
+        
+                            await router.push({name: 'auth_login'});
+        
+                        } else {
+        
+                            submitDisabled.value = false;
+        
+                            status.value = {
+                                type: 'error',
+                                show: true,
+                                label: 'Failed to create account'
+                            };
+        
+                        }
+    
+                    }, 500);
                     
                 }
             };
