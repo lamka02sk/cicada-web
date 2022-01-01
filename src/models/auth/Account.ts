@@ -1,12 +1,16 @@
 import Auth from "./Auth";
+import axios from "axios";
 
-export default class Register extends Auth {
+export default class Account extends Auth {
 
     public email: string = '';
     public firstname: string = '';
     public lastname: string = '';
     public password: string = '';
     public password_repeat: string = '';
+    protected token: string = '';
+    protected admin: boolean = false;
+    protected enabled: boolean = false;
 
     public _validator = {
         email: {
@@ -41,5 +45,9 @@ export default class Register extends Auth {
             max: 120
         }
     };
+
+    public async create() {
+        return axios.post(`/setup/create-admin-account`, this.asObject());
+    }
 
 }

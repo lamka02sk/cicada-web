@@ -7,7 +7,7 @@
         
         <p class="text-sm text-gray-800 text-center mb-4">This account will be the main account with full access to all settings and deployment options</p>
         
-        <Form v-if="formData">
+        <Form v-if="formData" @submit="createAccount">
             
             <FormRow>
                 <Text label="E-mail" name="email" type="email" placeholder="admin@cicada.cc" v-model="formData" required="1" autocomplete="email"></Text>
@@ -27,10 +27,10 @@
             </FormRow>
             
             <FormRow :center="true">
-                <Button type="submit">
+                <Button type="submit" :disabled="submitDisabled" :status-show="status && status.show" :status-type="status.type">
                     <slot>Create account</slot>
                     <template v-slot:status>
-                    
+                        {{ status.label }}
                     </template>
                 </Button>
             </FormRow>
@@ -38,6 +38,11 @@
         </Form>
     
     </ScreenCenter>
+    
+    <Alert v-model:show="showAlert" type="danger" :close-button="false">
+        <template v-slot:title>Invalid data</template>
+        Please check if all fields in the form are properly filled
+    </Alert>
     
 </template>
 
@@ -54,11 +59,13 @@
     import Text from "../../components/form/Text.vue";
     import Button from "../../components/form/Button.vue";
     import Password from "../../components/form/Password.vue";
+    import Alert from "../../components/notifications/Alert.vue";
     
-    import Register from "../../models/auth/Register";
+    import Account from "../../models/auth/Account";
+    import Validator from "../../validator/Validator";
     
     export default {
-        components: { ScreenCenter, Logo, Form, FormRow, Text, Button, Password },
+        components: { ScreenCenter, Logo, Form, FormRow, Text, Button, Password, Alert },
         setup() {
             
             const store = useStore();
@@ -70,10 +77,62 @@
                 }
             })();
             
-            const formData = ref<Register>(store.getters["auth/getRegisterForm"]);
+            const formData = ref<Account>(store.getters["auth/getRegisterForm"]);
+            const showAlert = ref<boolean>(false);
+            const submitDisabled = ref<boolean>(false);
+            const status = ref<any>({});
             
             return {
-                formData
+                formData,
+                showAlert,
+                submitDisabled,
+                status,
+                async createAccount() {
+    
+                    if(!formData.value) {
+                        return;
+                    }
+    
+                    submitDisabled.value = true;
+                    const validator = new Validator(formData.value);
+    
+                    if(!(await validator.validate())) {
+                        showAlert.value = true;
+                        submitDisabled.value = false;
+                        return;
+                    }
+    
+                    status.value = {
+                        type: 'loading',
+                        show: true,
+                        label: 'Creating account'
+                    };
+        
+                    const response = await store.dispatch('auth/createAccount');
+                    
+                    if(response?.data?.success) {
+    
+                        status.value = {
+                            type: 'success',
+                            show: true,
+                            label: 'Account was created'
+                        };
+                        
+                        await router.push({ name: 'auth_login' });
+                        
+                    } else {
+                        
+                        submitDisabled.value = false;
+    
+                        status.value = {
+                            type: 'error',
+                            show: true,
+                            label: 'Failed to create account'
+                        };
+                        
+                    }
+                    
+                }
             };
             
         }

@@ -14,7 +14,7 @@
         
         <p class="text-sm text-gray-800 text-center mb-4">Before using the cicada web UI, server connection needs to be configured on this device</p>
     
-        <Form v-if="configuration">
+        <Form v-if="configuration" @submit="checkConnection">
             <FormRow>
                 <Select label="Protocol" :options="protocolOptions" name="protocol" v-model="configuration" @update:modelValue="changePort"></Select>
             </FormRow>
@@ -28,7 +28,7 @@
                 <Text label="Path" name="path" v-model="configuration" required="1"></Text>
             </FormRow>
             <FormRow :center="true">
-                <Button type="submit" @click="checkConnection" :disabled="submitDisabled" :status-type="status.type" :status-show="status.show">
+                <Button type="submit" :disabled="submitDisabled" :status-type="status.type" :status-show="status && status.show">
                     <slot>Check connection</slot>
                     <template v-slot:status>
                         {{ status.label }}
@@ -149,8 +149,6 @@
                         }, 500)
                         
                     }
-                    
-                    
                     
                 }
             }

@@ -29,6 +29,11 @@ export default {
         },
         setStatus(state: VuexSystem, value: Status) {
             state.status = value;
+        },
+        setStatusReady(state: VuexSystem) {
+            if(state.status) {
+                state.status.ready = true;
+            }
         }
     },
     actions: {

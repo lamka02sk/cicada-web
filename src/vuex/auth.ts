@@ -1,22 +1,32 @@
-import Register from "../models/auth/Register";
+import Account from "../models/auth/Account";
 
 interface VuexAuth {
-    register: Register
+    register: Account
 }
 
 export default {
     namespaced: true,
     state: () => (<VuexAuth> {
-        register: new Register
+        register: new Account
     }),
     mutations: {
 
     },
     actions: {
+        async createAccount(context: any) {
 
+            const response = await context.getters.getRegisterForm.create();
+
+            if(response?.data?.success) {
+                context.commit('system/setStatusReady', null, { root: true })
+            }
+
+            return response;
+
+        }
     },
     getters: {
-        getRegisterForm(state: VuexAuth) : Register {
+        getRegisterForm(state: VuexAuth) : Account {
             return state.register;
         }
     }

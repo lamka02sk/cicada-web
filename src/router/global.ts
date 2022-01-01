@@ -2,7 +2,7 @@ import {RouteRecordRaw} from "vue-router";
 
 import Config from "../views/setup/Config.vue";
 import Login from "../views/auth/Login.vue";
-import Register from "../views/auth/Register.vue";
+import CreateAdminAccount from "../views/auth/CreateAdminAccount.vue";
 
 export default [
     <RouteRecordRaw> {
@@ -25,7 +25,7 @@ export default [
     <RouteRecordRaw> {
         name: 'auth_register',
         path: '/create-admin-account',
-        component: Register,
+        component: CreateAdminAccount,
         meta: {
             title: 'Create admin account'
         }

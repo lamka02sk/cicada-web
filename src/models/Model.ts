@@ -18,4 +18,19 @@ export default class Model {
         }
     }
 
+    public asObject() : any {
+
+        const data = {};
+
+        for(const key in this) {
+            if(key.charAt(0) !== '_') {
+                // @ts-ignore
+                data[key] = this[key];
+            }
+        }
+
+        return data;
+
+    }
+
 }

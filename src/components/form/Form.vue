@@ -1,6 +1,6 @@
 <template>
     
-    <form class="mb-4 last:mb-0 grid gap-4" @submit.prevent="() => {}" autocomplete="on">
+    <form class="mb-4 last:mb-0 grid gap-4" @submit.prevent="() => $emit('submit')" autocomplete="on">
         <slot></slot>
     </form>
     
@@ -9,7 +9,7 @@
 <script lang="ts">
     
     export default {
-    
+        emits: ['submit']
     }
 
 </script>

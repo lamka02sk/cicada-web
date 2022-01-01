@@ -35,7 +35,7 @@
                     equals.push(props.data._validator[props.property].equals);
                 }
                 
-                watch(() => equals.map(e => props.data[e]) || props.data._validator[props.property]._listener, async () => {
+                watch(() => [equals.map(e => props.data[e]), props.data._validator[props.property]._listener], async () => {
                     
                     const validator = new Validator(props.data);
                     valid.value = await validator.validateProperty(props.property);

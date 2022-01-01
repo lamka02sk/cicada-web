@@ -3,6 +3,7 @@ import store from './vuex/main'
 import Notification from "./models/system/Notification";
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 axios.interceptors.request.use(
     config => {
