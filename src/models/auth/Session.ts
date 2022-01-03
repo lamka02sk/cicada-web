@@ -19,7 +19,7 @@ export default class Session extends Auth {
 
     public async checkSession() : Promise<boolean> {
 
-        const response = await axios.post(`/auth/check`, this.asObject());
+        const response = await axios.get(`/auth/check`);
 
         if(!response?.data?.success || !this.token) {
             this.active = false;

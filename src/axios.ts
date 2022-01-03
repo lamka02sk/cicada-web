@@ -14,6 +14,12 @@ axios.interceptors.request.use(
             return config;
         }
 
+        const session = store.getters['auth/getSession'] ?? null;
+
+        if(session && config.headers) {
+            config.headers.Authorization = 'Bearer ' + session.token;
+        }
+
         config.baseURL = connectionConfig.getUrl();
         return config;
 

@@ -54,10 +54,10 @@ export default {
             if(response?.data?.success && response.data?.data?.token) {
 
                 const session = new Session(response.data.data.token);
+                context.commit('setSession', session);
 
-                if(await session.checkSession()) {
-                    context.commit('setSession', session);
-                } else {
+                if(!(await session.checkSession())) {
+                    context.commit('setSession', null);
                     return false;
                 }
 

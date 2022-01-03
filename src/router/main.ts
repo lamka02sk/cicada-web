@@ -1,11 +1,14 @@
 import {createRouter, createWebHistory, RouterOptions} from 'vue-router'
-import globalRoutes from './global'
 import {registerGuards} from "./guards";
+
+import globalRoutes from './global'
+import adminRoutes from "./admin";
 
 const router = createRouter(<RouterOptions> {
     history: createWebHistory(),
     routes: [
-        ...globalRoutes
+        ...globalRoutes,
+        ...adminRoutes,
     ]
 });
 
