@@ -1,11 +1,12 @@
 import Auth from "./Auth";
 import axios from "axios";
+import {Commit} from "vuex";
 
 export default class Session extends Auth {
 
     private static _ls_key: string = 'session_token';
 
-    private active: boolean = false;
+    active: boolean = false;
     private readonly token: string|null = null;
 
     public constructor(token: string) {
@@ -17,24 +18,20 @@ export default class Session extends Auth {
 
     }
 
-    public async checkSession() : Promise<boolean> {
+    public async checkSession(commit: Commit) : Promise<boolean> {
 
         const response = await axios.get(`/auth/check`);
 
         if(!response?.data?.success || !this.token) {
-            this.active = false;
+            commit('setSessionActive', false);
             return false;
         }
 
-        this.active = true;
+        commit('setSessionActive', true);
         localStorage.setItem(Session._ls_key, this.token);
 
         return true;
 
-    }
-
-    public isActive() {
-        return this.active;
     }
 
     public async logout() {

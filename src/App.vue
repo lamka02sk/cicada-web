@@ -1,5 +1,7 @@
 <template>
     
+    <Menu v-if="auth"></Menu>
+    
     <router-view></router-view>
     
     <footer class="fixed bottom-2 left-4 text-gray-300 hover:text-gray-400 duration-200 group text-sm flex right-4 justify-between">
@@ -22,6 +24,25 @@
     
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
+
+    import Menu from "./views/Menu.vue";
+    import {useStore} from "vuex";
+    import {computed} from "vue";
+    
+    export default {
+        components: { Menu },
+        setup() {
+            
+            const store = useStore();
+            
+            return {
+                auth: computed(() => {
+                    return store.getters["auth/hasSession"];
+                })
+            }
+            
+        }
+    }
 
 </script>

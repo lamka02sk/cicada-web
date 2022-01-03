@@ -28,7 +28,7 @@ export function registerGuards(router: Router) {
         // Authenticate
         if(to.meta?.auth && !(await store.dispatch('auth/signIn'))) {
             return next({ name: 'auth_login' });
-        } else if(!to.meta?.auth && await store.dispatch('auth/signIn')) {
+        } else if(!to.meta?.auth && await store.dispatch('auth/signIn') && !from.meta?.auth) {
             return next({ name: 'dashboard' });
         }
 
