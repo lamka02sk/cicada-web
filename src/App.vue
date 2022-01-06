@@ -1,8 +1,7 @@
 <template>
     
     <Menu v-if="auth"></Menu>
-    
-    <router-view></router-view>
+    <Main></Main>
     
     <footer class="absolute mt-6 bottom-2 left-4 text-gray-300 hover:text-gray-400 duration-200 group text-sm flex right-4 justify-between">
         <div>
@@ -27,11 +26,12 @@
 <script lang="ts">
 
     import Menu from "./views/Menu.vue";
+    import Main from "./views/Main.vue";
     import {useStore} from "vuex";
     import {computed} from "vue";
     
     export default {
-        components: { Menu },
+        components: { Menu, Main },
         setup() {
             
             const store = useStore();

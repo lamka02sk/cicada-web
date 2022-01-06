@@ -2,9 +2,6 @@ import {NavigationGuardNext, RouteLocationNormalized, Router} from "vue-router";
 import store from './../vuex/main'
 import Connection from "../models/config/Connection";
 
-const BASE_TITLE = 'Cicada';
-document.title = BASE_TITLE;
-
 export function registerGuards(router: Router) {
 
     router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
@@ -39,7 +36,14 @@ export function registerGuards(router: Router) {
         }
 
         // Set route title
-        document.title = `${to.meta.title ?? ''}${to.meta.title ? ' | ' : ''}${BASE_TITLE}`;
+        const title: Array<string> = [];
+        to.matched.forEach(r => {
+            if(r.meta.title) {
+                title.push(<string>r.meta.title);
+            }
+        });
+
+        document.title = title.reverse().join(' | ');
 
         return next();
 
