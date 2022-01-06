@@ -35,8 +35,9 @@ export default class Session extends Auth {
     }
 
     public async logout() {
+        let result = await axios.get(`/auth/logout`);
         Session.forceLogout();
-        return axios.post(`/auth/logout`, this.asObject());
+        return result;
     }
 
     public static forceLogout() {

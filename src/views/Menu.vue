@@ -21,7 +21,7 @@
                     </li>
                 </ul>
             </nav>
-            <div class="flex items-center">
+            <div class="flex items-center text-gray-600">
                 <router-link class="material-icons-outlined text-4xl mr-1 py-1 px-1.5 rounded-full hover:bg-slate-200 duration-200" to="account" title="My Account">account_circle</router-link>
                 <router-link class="material-icons-outlined mx-1 p-1 rounded-full hover:bg-slate-200 duration-200" to="settings" title="System Settings">settings</router-link>
                 <router-link class="material-icons-outlined ml-1 p-1 rounded-full hover:bg-red-200 hover:text-red-700 duration-200" to="logout" title="Logout">power_settings_new</router-link>

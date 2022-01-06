@@ -1,6 +1,5 @@
 module.exports = {
     content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx,scss}'],
-    darkMode: false,
     theme: {
         fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif'],

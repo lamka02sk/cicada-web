@@ -25,6 +25,12 @@ export function registerGuards(router: Router) {
             return next({ name: 'configure_connection' });
         }
 
+        // Logout
+        if(to.name === 'auth_logout') {
+            await store.dispatch('auth/logout');
+            return next({ name: 'auth_login' });
+        }
+
         // Authenticate
         if(to.meta?.auth && !(await store.dispatch('auth/signIn'))) {
             return next({ name: 'auth_login' });

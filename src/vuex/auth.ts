@@ -16,6 +16,9 @@ export default {
         session: null
     }),
     mutations: {
+        setLogin(state: VuexAuth, login: Login) {
+            state.login = login;
+        },
         setSession(state: VuexAuth, session: Session|null) {
             state.session = session;
         },
@@ -83,15 +86,20 @@ export default {
         },
         async logout(context: any) {
 
-            const session = context.getters.getSession;
+            const session: Session|null = context.getters.getSession;
 
             if(!session) {
                 return true;
             }
 
+            let result = await session.logout();
             context.commit('setSession', null);
-            return await session.logout();
 
+            return result;
+
+        },
+        clearLogin(context: any) {
+            context.commit('setLogin', new Login);
         }
     },
     getters: {

@@ -28,5 +28,9 @@ export default [
         meta: {
             title: 'Create admin account'
         }
+    },
+    <RouteRecordRaw> {
+        name: 'auth_logout',
+        path: '/logout'
     }
 ]
