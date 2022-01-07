@@ -1,6 +1,7 @@
 import axios from 'axios';
 import store from './vuex/main'
 import Notification from "./models/system/Notification";
+import {Exception} from "sass";
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -29,8 +30,18 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(response => {
+
+    if(!response.data.success) {
+        throw `${response.data.status} [${response.data.message}]`;
+    }
+
     return response;
+
 }, error => {
+
     const notification = new Notification('error', 'Request failed', error, 10);
     store.dispatch('system/pushNotification', notification);
+
+    throw `${error.message.replace('Error: ', '')}`;
+
 });

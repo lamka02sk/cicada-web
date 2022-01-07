@@ -1,6 +1,6 @@
 <template>
 
-    <Form v-if="formData">
+    <Form v-if="formData" @submit="saveFormData">
         
         <FormRow>
             <h2 class="text-gray-700 text-2xl">Hi, <strong>{{ formData.firstname }} {{ formData.lastname }}</strong>, this page is all about you</h2>
@@ -24,7 +24,10 @@
         </FormRow>
         
         <FormRow>
-            <Button auto="1">Save changes</Button>
+            <Button auto="1" type="submit" :status-show="formData._buttonStatus.show" :status-type="formData._buttonStatus.type">
+                Save changes
+                <template v-slot:status>{{ formData._buttonStatus.label }}</template>
+            </Button>
         </FormRow>
         
     </Form>
@@ -42,6 +45,8 @@
     import Empty from  '../../components/notifications/Empty.vue';
     import {computed} from "vue";
     import {useStore} from "vuex";
+    
+    import User from "../../models/auth/User";
 
     export default {
         components: { Form, FormRow, Text, Button, Empty },
@@ -50,10 +55,13 @@
             const store = useStore();
             
             store.dispatch('auth/loadUser', true);
-            const formData = computed(() => store.getters["auth/getUser"]);
+            const formData = computed(() => <User>store.getters["auth/getUser"]);
             
             return {
-                formData
+                formData,
+                saveFormData() {
+                    formData.value.update();
+                }
             }
             
         }

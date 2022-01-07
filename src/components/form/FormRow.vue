@@ -12,7 +12,7 @@
         props: ['center'],
         setup(props: any) {
             return {
-                center: props.center ?? false
+            
             }
         }
     }

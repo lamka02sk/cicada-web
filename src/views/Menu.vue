@@ -44,7 +44,11 @@
 <style lang="scss" scoped>
 
     .router-link-active {
-        @apply bg-slate-100 shadow-md;
+        @apply bg-slate-200;
+        
+        &:hover {
+            @apply bg-slate-100;
+        }
     }
 
 </style>

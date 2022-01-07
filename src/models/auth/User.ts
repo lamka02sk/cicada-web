@@ -27,4 +27,24 @@ export default class User extends Model {
 
     }
 
+    public async update() {
+
+        this._buttonStatus.display('loading', 'Saving user data');
+
+        if(!this.uuid) {
+            this._buttonStatus.display('error', 'UUID is not defined for this user');
+            return;
+        }
+
+        try {
+            await axios.put(`/user/update`, this.asObject());
+        } catch(e: any) {
+            this._buttonStatus.display('error', `Error while saving user data: ${e}`);
+            return;
+        }
+
+        this._buttonStatus.display('success', `Saved`);
+
+    }
+
 }

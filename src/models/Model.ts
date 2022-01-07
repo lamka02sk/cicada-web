@@ -1,10 +1,10 @@
-import {nanoid} from 'nanoid'
-import axios from "axios";
+import ButtonStatus from "./system/ButtonStatus";
 
 export default class Model {
 
     protected _loaded: boolean = false;
     protected _events: any = {};
+    public _buttonStatus: ButtonStatus = new ButtonStatus();
 
     public uuid: string|null = null;
 
