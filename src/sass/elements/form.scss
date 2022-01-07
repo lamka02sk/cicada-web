@@ -9,3 +9,7 @@ input:not([type=checkbox], [type=radio]), select:not([multiple]) {
   }
 
 }
+
+input[readonly] {
+  @apply bg-gray-100 cursor-not-allowed;
+}

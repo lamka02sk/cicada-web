@@ -8,16 +8,16 @@
             <nav class="grid place-items-center">
                 <ul class="flex text-gray-700 font-medium text-sm">
                     <li class="mx-6">
-                        <router-link class="py-2 px-4 hover:bg-slate-200 hover:shadow-inner rounded-lg duration-200" to="/dashboard">Dashboard</router-link>
+                        <router-link class="py-2 px-4 hover:bg-slate-200 hover:shadow-inner rounded duration-200" to="/dashboard">Dashboard</router-link>
                     </li>
                     <li class="mx-6">
-                        <router-link class="py-2 px-4 hover:bg-slate-200 hover:shadow-inner rounded-lg duration-200" to="/repositories">Repositories</router-link>
+                        <router-link class="py-2 px-4 hover:bg-slate-200 hover:shadow-inner rounded duration-200" to="/repositories">Repositories</router-link>
                     </li>
                     <li class="mx-6">
-                        <router-link class="py-2 px-4 hover:bg-slate-200 hover:shadow-inner rounded-lg duration-200" to="/servers">Servers</router-link>
+                        <router-link class="py-2 px-4 hover:bg-slate-200 hover:shadow-inner rounded duration-200" to="/servers">Servers</router-link>
                     </li>
                     <li class="mx-6">
-                        <router-link class="py-2 px-4 hover:bg-slate-200 hover:shadow-inner rounded-lg duration-200" to="/logs">Logs</router-link>
+                        <router-link class="py-2 px-4 hover:bg-slate-200 hover:shadow-inner rounded duration-200" to="/logs">Logs</router-link>
                     </li>
                 </ul>
             </nav>

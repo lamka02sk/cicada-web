@@ -2,7 +2,7 @@
     
     <div class="flex">
         
-        <aside v-if="siblings.length" class="w-64 mr-10">
+        <aside v-if="siblings.length" class="w-64 mr-10 shrink-0">
             <ul>
                 <li v-for="sibling in siblings">
                     <router-link :to="{ name: sibling.name }" class="router-link">{{ sibling.meta.title }}</router-link>
@@ -10,8 +10,8 @@
             </ul>
         </aside>
         
-        <div>
-        <router-view></router-view>
+        <div class="w-full">
+            <router-view></router-view>
         </div>
         
     </div>
@@ -57,7 +57,7 @@ export default {
 <style lang="scss" scoped>
 
     .router-link {
-        @apply relative inline-block w-full py-2 px-4 duration-200 hover:bg-gray-100 rounded-lg text-sm font-medium text-gray-700 my-0.5;
+        @apply relative inline-block w-full py-2 px-3 duration-200 hover:bg-gray-100 rounded text-sm font-medium text-gray-700 my-0.5;
     }
 
     .router-link-exact-active {

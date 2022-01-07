@@ -1,11 +1,13 @@
 import Account from "../models/auth/Account";
 import Login from "../models/auth/Login";
 import Session from "../models/auth/Session";
+import User from "../models/auth/User";
 
 interface VuexAuth {
     register: Account,
     login: Login,
-    session: Session|null
+    session: Session|null,
+    user: User|null
 }
 
 export default {
@@ -13,7 +15,8 @@ export default {
     state: () => (<VuexAuth> {
         register: new Account,
         login: new Login,
-        session: null
+        session: null,
+        user: null
     }),
     mutations: {
         setLogin(state: VuexAuth, login: Login) {
@@ -21,6 +24,9 @@ export default {
         },
         setSession(state: VuexAuth, session: Session|null) {
             state.session = session;
+        },
+        setUser(state: VuexAuth, user: User|null) {
+            state.user = user;
         },
         setSessionActive(state: VuexAuth, active: boolean) {
             if(state.session) {
@@ -43,6 +49,7 @@ export default {
         async signIn(context: any) {
 
             if(context.getters.hasSession) {
+                context.dispatch('loadUser');
                 return true;
             }
 
@@ -54,15 +61,18 @@ export default {
                 context.commit('setSession', session);
 
                 if(await session.checkSession(context.commit)) {
+                    context.dispatch('loadUser');
                     return true;
                 } else {
                     context.commit('setSession', null);
+                    context.commit('setUser', null);
                     Session.forceLogout();
                     return false;
                 }
 
             } else if(loginForm.isEmpty()) {
                 context.commit('setSession', null);
+                context.commit('setUser', null);
                 Session.forceLogout();
                 return false;
             }
@@ -76,6 +86,7 @@ export default {
 
                 if(!(await session.checkSession(context.commit))) {
                     context.commit('setSession', null);
+                    context.commit('setUser', null);
                     return false;
                 }
 
@@ -94,12 +105,24 @@ export default {
 
             let result = await session.logout();
             context.commit('setSession', null);
+            context.commit('setUser', null);
 
             return result;
 
         },
         clearLogin(context: any) {
             context.commit('setLogin', new Login);
+        },
+        async loadUser(context: any, force = false) {
+
+            let user: User|null = context.getters.getUser;
+
+            if(!user || force) {
+                user = await User.get_authenticated();
+            }
+
+            context.commit('setUser', user);
+
         }
     },
     getters: {
@@ -114,6 +137,9 @@ export default {
         },
         getSession(state: VuexAuth) : Session|null {
             return state.session;
+        },
+        getUser(state: VuexAuth) : User|null {
+            return state.user;
         }
     }
 }

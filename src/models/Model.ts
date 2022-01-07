@@ -18,6 +18,15 @@ export default class Model {
         }
     }
 
+    fromJSON(json: any) {
+
+        for(const param of Object.getOwnPropertyNames(this)) {
+            if(param.charAt(0) === '_' || !json.hasOwnProperty(param)) continue;
+            this[param] = json[param];
+        }
+
+    }
+
     public asObject() : any {
 
         const data = {};

@@ -1,6 +1,6 @@
 <template>
 
-    <FormItem class="mt-6">
+    <FormItem :class="`${!auto ? 'mt-6' : ''} ${$parent.center ? 'justify-center' : ''}`">
         <button :class="`${color}
                 rounded h-9 shadow px-4 text-sm font-bold transition duration-200
                 focus:shadow-xl focus:outline-none active:shadow-xl
@@ -23,7 +23,7 @@
     export default {
         emits: ['click'],
         components: { FormItem, ButtonStatus },
-        props: ['label', 'value', 'disabled', 'type', 'color', 'statusType', 'statusShow'],
+        props: ['label', 'value', 'disabled', 'type', 'color', 'statusType', 'statusShow', 'auto'],
         setup(props: any) {
             return {
                 value: props.value ?? '',

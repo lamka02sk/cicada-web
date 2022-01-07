@@ -3,7 +3,7 @@
     <FormItem>
         <Label :id="id">{{ label }}</Label>
         <div class="relative w-full h-full">
-            <input :class="hasRightPadding" :id="id" :type="type" v-model="modelValue[name]" :placeholder="placeholder" :autocomplete="autocomplete">
+            <input :class="hasRightPadding" :id="id" :type="type" v-model="modelValue[name]" :placeholder="placeholder" :autocomplete="autocomplete" :readonly="readonly">
             <Validation :data="modelValue" :property="name" @validate="onValidate" :novalidate="novalidate"></Validation>
             <RequiredIndicator v-bind="{ required, modelValue }" v-if="!novalidate"></RequiredIndicator>
         </div>
@@ -24,7 +24,7 @@
     export default {
         components: { Label, FormItem, Validation, RequiredIndicator },
         emits: ['update:modelValue'],
-        props: ['label', 'modelValue', 'type', 'placeholder', 'name', 'required', 'autocomplete', 'novalidate'],
+        props: ['label', 'modelValue', 'type', 'placeholder', 'name', 'required', 'autocomplete', 'novalidate', 'readonly'],
         setup(props: any, { emit }: any) {
             
             const uuid = ref(nanoid());
