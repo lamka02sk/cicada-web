@@ -3,7 +3,7 @@
     <Form v-if="formData" @submit="saveFormData">
         
         <FormRow>
-            <h2 class="text-gray-700 text-2xl">Hi, <strong>{{ formData.firstname }} {{ formData.lastname }}</strong>, this page is all about you</h2>
+            <Heading tag="h2">Hi, <strong>{{ formData.firstname }} {{ formData.lastname }}</strong>, this page is all about you</Heading>
         </FormRow>
         
         <FormRow>
@@ -43,13 +43,14 @@
     import Text from "../../components/form/Text.vue";
     import Button from "../../components/form/Button.vue";
     import Empty from  '../../components/notifications/Empty.vue';
+    import Heading from "../../components/elements/Heading.vue";
     import {computed} from "vue";
     import {useStore} from "vuex";
     
     import User from "../../models/auth/User";
 
     export default {
-        components: { Form, FormRow, Text, Button, Empty },
+        components: { Form, FormRow, Text, Button, Empty, Heading },
         setup() {
         
             const store = useStore();

@@ -10,6 +10,8 @@ export default class AuthLogin extends Model {
     public created_at: string = '';
     public updated_at: string = '';
 
+    public _serialize = ['uuid'];
+
     public static async getAll() : Promise<Array<AuthLogin>|null> {
 
         try {
@@ -19,6 +21,12 @@ export default class AuthLogin extends Model {
             return null;
         }
 
+    }
+
+    public async disable() {
+        try {
+            await axios.put(`/user/login/disable`, this.asObject());
+        } catch(e) {}
     }
 
 }
