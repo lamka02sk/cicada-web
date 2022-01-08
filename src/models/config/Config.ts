@@ -47,7 +47,11 @@ export default class Config extends Model {
 
         try {
 
-            const response = await axios.get(this._resource_url);
+            let response = null;
+
+            try {
+                response = await axios.get(this._resource_url);
+            } catch(e) {}
 
             if(response && response.data) {
 

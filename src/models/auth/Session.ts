@@ -20,7 +20,11 @@ export default class Session extends Auth {
 
     public async checkSession(commit: Commit) : Promise<boolean> {
 
-        const response = await axios.get(`/auth/check`);
+        let response = null;
+
+        try {
+            response = await axios.get(`/auth/check`);
+        } catch(e) {}
 
         if(!response?.data?.success || !this.token) {
             commit('setSessionActive', false);
@@ -35,9 +39,13 @@ export default class Session extends Auth {
     }
 
     public async logout() {
-        let result = await axios.get(`/auth/logout`);
-        Session.forceLogout();
-        return result;
+        try {
+            const result = await axios.get(`/auth/logout`);
+            Session.forceLogout();
+            return result;
+        } catch(e) {
+            return null;
+        }
     }
 
     public static forceLogout() {

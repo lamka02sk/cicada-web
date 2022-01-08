@@ -5,6 +5,7 @@ export default class Model {
     protected _loaded: boolean = false;
     protected _events: any = {};
     public _buttonStatus: ButtonStatus = new ButtonStatus();
+    public _serialize: Array<string> = [];
 
     public uuid: string|null = null;
 
@@ -20,9 +21,9 @@ export default class Model {
 
     fromJSON(json: any) {
 
-        for(const param of Object.getOwnPropertyNames(this)) {
-            if(param.charAt(0) === '_' || !json.hasOwnProperty(param)) continue;
-            this[param] = json[param];
+        for(const key in this) {
+            if(key.charAt(0) === '_' || !json.hasOwnProperty(key)) continue;
+            this[key] = json[key];
         }
 
     }
@@ -30,8 +31,9 @@ export default class Model {
     public asObject() : any {
 
         const data = {};
+        const keyPool = this._serialize.length ? this._serialize : Object.keys(this);
 
-        for(const key in this) {
+        for(const key of keyPool) {
             if(key.charAt(0) !== '_') {
                 // @ts-ignore
                 data[key] = this[key];

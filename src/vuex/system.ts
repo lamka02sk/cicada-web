@@ -44,8 +44,10 @@ export default {
         async getStatus(context: any) {
 
             if(!context.getters.getStatus) {
-                const response = await axios.get(`/status`);
-                context.commit('setStatus', response.data.data ?? null);
+                try {
+                    const response = await axios.get(`/status`);
+                    context.commit('setStatus', response.data.data ?? null);
+                } catch(e) {}
             }
 
             return context.getters.getStatus;

@@ -12,16 +12,37 @@ export default class User extends Model {
     public created_at: string = '';
     public updated_at: string = '';
 
+    public _validator = {
+        firstname: {
+            required: true,
+            type: 'string',
+            max: 60
+        },
+        lastname: {
+            required: true,
+            type: 'string',
+            max: 60
+        }
+    };
+
+    public _serialize = [
+        'firstname', 'lastname', 'uuid'
+    ];
+
     public static async get_authenticated() : Promise<User | null> {
 
-        const response = await axios.get(`/user/auth`);
+        let response = null;
+
+        try {
+            response = await axios.get(`/user/auth`);
+        } catch(e) {}
 
         if(!response?.data?.data?.user) {
             return null;
         }
 
         const user = new User();
-        user.fromJSON(response.data.data.user);
+        user.fromJSON(response?.data?.data?.user || {});
 
         return user;
 
@@ -37,7 +58,7 @@ export default class User extends Model {
         }
 
         try {
-            await axios.put(`/user/update`, this.asObject());
+            await axios.put(`/user/update/self`, this.asObject());
         } catch(e: any) {
             this._buttonStatus.display('error', `Error while saving user data: ${e}`);
             return;

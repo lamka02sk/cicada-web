@@ -49,8 +49,12 @@ export default class Connection extends Config {
             return false;
         }
 
-        const response = await axios.get(url + '/ping');
-        return this._valid = !!response?.data?.success;
+        try {
+            const response = await axios.get(url + '/ping');
+            return this._valid = !!response.data?.success;
+        } catch(e) {
+            return this._valid = false;
+        }
 
     }
 

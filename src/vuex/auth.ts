@@ -2,31 +2,37 @@ import Account from "../models/auth/Account";
 import Login from "../models/auth/Login";
 import Session from "../models/auth/Session";
 import User from "../models/auth/User";
+import AuthLogin from "../models/auth/AuthLogin";
 
 interface VuexAuth {
     register: Account,
-    login: Login,
+    loginForm: Login,
     session: Session|null,
-    user: User|null
+    user: User|null,
+    logins: Array<AuthLogin>|null
 }
 
 export default {
     namespaced: true,
     state: () => (<VuexAuth> {
         register: new Account,
-        login: new Login,
+        loginForm: new Login,
         session: null,
-        user: null
+        user: null,
+        logins: null
     }),
     mutations: {
-        setLogin(state: VuexAuth, login: Login) {
-            state.login = login;
+        setLoginForm(state: VuexAuth, login: Login) {
+            state.loginForm = login;
         },
         setSession(state: VuexAuth, session: Session|null) {
             state.session = session;
         },
         setUser(state: VuexAuth, user: User|null) {
             state.user = user;
+        },
+        setLogins(state: VuexAuth, logins: Array<AuthLogin>|null) {
+            state.logins = logins;
         },
         setSessionActive(state: VuexAuth, active: boolean) {
             if(state.session) {
@@ -54,7 +60,7 @@ export default {
             }
 
             const session = Session.restore();
-            const loginForm = context.getters.getLoginForm;
+            const loginForm: Login = context.getters.getLoginForm;
 
             if(session) {
 
@@ -110,8 +116,8 @@ export default {
             return result;
 
         },
-        clearLogin(context: any) {
-            context.commit('setLogin', new Login);
+        clearLoginForm(context: any) {
+            context.commit('setLoginForm', new Login);
         },
         async loadUser(context: any, force = false) {
 
@@ -123,6 +129,17 @@ export default {
 
             context.commit('setUser', user);
 
+        },
+        async loadLogins(context: any, force = false) {
+
+            let logins: Array<AuthLogin>|null = context.getters.getLogins;
+
+            if(!logins || force) {
+                logins = await AuthLogin.getAll();
+            }
+
+            context.commit('setLogins', logins);
+
         }
     },
     getters: {
@@ -130,7 +147,7 @@ export default {
             return state.register;
         },
         getLoginForm(state: VuexAuth) : Login {
-            return state.login;
+            return state.loginForm;
         },
         hasSession(state: VuexAuth) : boolean {
             return state.session !== null && state.session.active;
@@ -140,6 +157,9 @@ export default {
         },
         getUser(state: VuexAuth) : User|null {
             return state.user;
+        },
+        getLogins(state: VuexAuth) : Array<AuthLogin>|null {
+            return state.logins;
         }
     }
 }

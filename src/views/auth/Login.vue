@@ -103,7 +103,7 @@
                                 label: 'Success!'
                             };
         
-                            await store.dispatch('auth/clearLogin');
+                            await store.dispatch('auth/clearLoginForm');
                             await router.push({name: 'dashboard'});
         
                         } else {

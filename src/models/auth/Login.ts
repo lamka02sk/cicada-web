@@ -20,7 +20,11 @@ export default class Login extends Auth {
     }
 
     public login() {
-        return axios.post(`/auth/login`, this.asObject());
+        try {
+            return axios.post(`/auth/login`, this.asObject());
+        } catch(e) {
+            return null;
+        }
     }
 
     public isEmpty() {

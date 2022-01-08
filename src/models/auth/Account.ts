@@ -47,7 +47,11 @@ export default class Account extends Auth {
     };
 
     public async create() {
-        return axios.post(`/setup/create-admin-account`, this.asObject());
+        try {
+            return axios.post(`/setup/create-admin-account`, this.asObject());
+        } catch(e) {
+            return null;
+        }
     }
 
 }
