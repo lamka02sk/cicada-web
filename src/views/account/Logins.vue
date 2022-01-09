@@ -5,7 +5,6 @@
         <Heading tag="h2">Active logins</Heading>
         <table>
             <tr>
-                <th>UUID</th>
                 <th>Browser</th>
                 <th>IP Address</th>
                 <th>Login Time</th>
@@ -13,7 +12,6 @@
             </tr>
             <template v-for="login in logins" :key="login.uuid">
                 <tr v-if="login.active">
-                    <td>{{ login.uuid }}</td>
                     <td>{{ getBrowserInfo(login.user_agent) }}</td>
                     <td>{{ login.ip_address.split('/')[0] }}</td>
                     <td>{{ formatDateTime(login.created_at) }}</td>
@@ -29,7 +27,6 @@
         <Heading tag="h2">Login history</Heading>
         <table>
             <tr>
-                <th>UUID</th>
                 <th>Browser</th>
                 <th>IP Address</th>
                 <th>Login Time</th>
@@ -37,7 +34,6 @@
             </tr>
             <template v-for="login in logins" :key="login.uuid">
                 <tr v-if="!login.active">
-                    <td>{{ login.uuid }}</td>
                     <td>{{ getBrowserInfo(login.user_agent) }}</td>
                     <td>{{ login.ip_address.split('/')[0] }}</td>
                     <td>{{ formatDateTime(login.created_at) }}</td>
@@ -72,8 +68,8 @@
             
             const store = useStore();
     
-            store.dispatch('auth/loadLogins', true);
-            const logins = computed(() => <Array<AuthLogin>>store.getters["auth/getLogins"]);
+            store.dispatch('user/loadLogins', true);
+            const logins = computed(() => <Array<AuthLogin>>store.getters["user/getLogins"]);
     
             return {
                 logins,
@@ -90,7 +86,7 @@
                     authLogin.fromJSON(login);
                     await authLogin.disable();
                     
-                    store.dispatch('auth/loadLogins', true);
+                    store.dispatch('user/loadLogins', true);
                     
                 }
             }

@@ -57,11 +57,11 @@ export default {
 <style lang="scss" scoped>
 
     .router-link {
-        @apply relative inline-block w-full py-2 px-3 duration-200 hover:bg-gray-100 rounded text-sm font-medium text-gray-700 my-0.5;
+        @apply relative inline-block w-full py-2 px-3 duration-200 bg-gray-100 hover:bg-slate-300 rounded text-sm font-medium text-gray-700 my-0.5;
     }
 
     .router-link-exact-active {
-        @apply bg-slate-200 font-semibold hover:shadow-inner hover:bg-slate-100;
+        @apply bg-slate-200 font-semibold hover:shadow-inner hover:bg-slate-300;
     }
 
 </style>

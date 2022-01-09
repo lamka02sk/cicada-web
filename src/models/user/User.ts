@@ -29,7 +29,7 @@ export default class User extends Model {
         'firstname', 'lastname', 'uuid'
     ];
 
-    public static async get_authenticated() : Promise<User | null> {
+    public static async getAuthenticated() : Promise<User | null> {
 
         let response = null;
 

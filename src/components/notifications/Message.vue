@@ -1,11 +1,14 @@
 <template>
 
     <div class="message mb-4 p-4 rounded shadow-sm" :class="background">
-        <div class="relative pl-8 ">
+        <div class="relative pl-8" v-if="icon">
             <span class="material-icons-outlined absolute top-0.5 left-0" v-if="icon">{{ icon }}</span>
             <p class="text-sm">
-                <slot name="description"></slot>
+                <slot></slot>
             </p>
+        </div>
+        <div v-else>
+            <slot></slot>
         </div>
     </div>
     

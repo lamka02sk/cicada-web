@@ -1,15 +1,11 @@
 import Account from "../models/auth/Account";
 import Login from "../models/auth/Login";
 import Session from "../models/auth/Session";
-import User from "../models/auth/User";
-import AuthLogin from "../models/auth/AuthLogin";
 
 interface VuexAuth {
     register: Account,
     loginForm: Login,
-    session: Session|null,
-    user: User|null,
-    logins: Array<AuthLogin>|null
+    session: Session|null
 }
 
 export default {
@@ -27,12 +23,6 @@ export default {
         },
         setSession(state: VuexAuth, session: Session|null) {
             state.session = session;
-        },
-        setUser(state: VuexAuth, user: User|null) {
-            state.user = user;
-        },
-        setLogins(state: VuexAuth, logins: Array<AuthLogin>|null) {
-            state.logins = logins;
         },
         setSessionActive(state: VuexAuth, active: boolean) {
             if(state.session) {
@@ -55,7 +45,7 @@ export default {
         async signIn(context: any) {
 
             if(context.getters.hasSession) {
-                context.dispatch('loadUser');
+                context.dispatch('user/loadUser', null, { root: true });
                 return true;
             }
 
@@ -67,18 +57,18 @@ export default {
                 context.commit('setSession', session);
 
                 if(await session.checkSession(context.commit)) {
-                    context.dispatch('loadUser');
+                    context.dispatch('user/loadUser', null, { root: true });
                     return true;
                 } else {
                     context.commit('setSession', null);
-                    context.commit('setUser', null);
+                    context.commit('user/setUser', null, { root: true });
                     Session.forceLogout();
                     return false;
                 }
 
             } else if(loginForm.isEmpty()) {
                 context.commit('setSession', null);
-                context.commit('setUser', null);
+                context.commit('user/setUser', null, { root: true });
                 Session.forceLogout();
                 return false;
             }
@@ -92,7 +82,7 @@ export default {
 
                 if(!(await session.checkSession(context.commit))) {
                     context.commit('setSession', null);
-                    context.commit('setUser', null);
+                    context.commit('user/setUser', null, { root: true });
                     return false;
                 }
 
@@ -118,28 +108,6 @@ export default {
         },
         clearLoginForm(context: any) {
             context.commit('setLoginForm', new Login);
-        },
-        async loadUser(context: any, force = false) {
-
-            let user: User|null = context.getters.getUser;
-
-            if(!user || force) {
-                user = await User.get_authenticated();
-            }
-
-            context.commit('setUser', user);
-
-        },
-        async loadLogins(context: any, force = false) {
-
-            let logins: Array<AuthLogin>|null = context.getters.getLogins;
-
-            if(!logins || force) {
-                logins = await AuthLogin.getAll();
-            }
-
-            context.commit('setLogins', logins);
-
         }
     },
     getters: {
@@ -154,12 +122,6 @@ export default {
         },
         getSession(state: VuexAuth) : Session|null {
             return state.session;
-        },
-        getUser(state: VuexAuth) : User|null {
-            return state.user;
-        },
-        getLogins(state: VuexAuth) : Array<AuthLogin>|null {
-            return state.logins;
         }
     }
 }

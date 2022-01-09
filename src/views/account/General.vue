@@ -47,7 +47,7 @@
     import {computed} from "vue";
     import {useStore} from "vuex";
     
-    import User from "../../models/auth/User";
+    import User from "../../models/user/User";
 
     export default {
         components: { Form, FormRow, Text, Button, Empty, Heading },
@@ -55,8 +55,8 @@
         
             const store = useStore();
             
-            store.dispatch('auth/loadUser', true);
-            const formData = computed(() => <User>store.getters["auth/getUser"]);
+            store.dispatch('user/loadUser', true);
+            const formData = computed(() => <User>store.getters["user/getUser"]);
             
             return {
                 formData,

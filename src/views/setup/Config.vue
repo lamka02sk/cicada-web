@@ -6,10 +6,8 @@
         <h1 class="text-xl text-gray-600 my-4 uppercase text-center">Server connection</h1>
         
         <Message type="tip" icon="tips_and_updates">
-            <template v-slot:description>
-                To skip this step, you can define a default connection
-                in <code>config/connection.json</code>
-            </template>
+            To skip this step, you can define a default connection
+            in <code>config/connection.json</code>
         </Message>
         
         <p class="text-sm text-gray-800 text-center mb-6">Before using the cicada web UI, server connection needs to be configured on this device</p>
