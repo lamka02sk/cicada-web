@@ -13,9 +13,7 @@ export default {
     state: () => (<VuexAuth> {
         register: new Account,
         loginForm: new Login,
-        session: null,
-        user: null,
-        logins: null
+        session: null
     }),
     mutations: {
         setLoginForm(state: VuexAuth, login: Login) {
@@ -101,7 +99,7 @@ export default {
 
             let result = await session.logout();
             context.commit('setSession', null);
-            context.commit('setUser', null);
+            context.commit('user/setUser', null, { root: true });
 
             return result;
 

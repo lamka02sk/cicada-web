@@ -42,6 +42,11 @@
         @apply bg-indigo-700 hover:bg-indigo-600 focus:bg-indigo-800 active:bg-indigo-800;
     }
     
+    .mute {
+        @apply text-gray-500;
+        @apply bg-gray-100 hover:bg-gray-200 focus:bg-gray-300 active:bg-gray-300;
+    }
+    
     .gray {
         @apply text-gray-200;
         @apply bg-gray-600 hover:bg-gray-500 focus:bg-gray-700 active:bg-gray-700;
