@@ -2,12 +2,14 @@ import AuthLogin from "../models/auth/AuthLogin";
 import User from "../models/user/User";
 import UserSecurity from "../models/user/UserSecurity";
 import PasswordChange from "../models/user/PasswordChange";
+import UserNotifications from "../models/user/UserNotifications";
 
 interface VuexUser {
     user: User|null,
     logins: Array<AuthLogin>|null,
     security: UserSecurity|null,
-    passwordChange: PasswordChange
+    passwordChange: PasswordChange,
+    notifications: UserNotifications|null
 }
 
 export default {
@@ -16,7 +18,8 @@ export default {
         user: null,
         logins: null,
         security: null,
-        passwordChange: new PasswordChange()
+        passwordChange: new PasswordChange(),
+        notifications: null
     }),
     mutations: {
         setUser(state: VuexUser, user: User|null) {
@@ -30,10 +33,13 @@ export default {
         },
         setPasswordChange(state: VuexUser, passwordChange: PasswordChange) {
             state.passwordChange = passwordChange;
+        },
+        setNotifications(state: VuexUser, notifications: UserNotifications|null) {
+            state.notifications = notifications;
         }
     },
     actions: {
-        async loadUser(context: any, force = false) {
+        async loadUser(context: any, force: boolean = false) {
 
             let user: User|null = context.getters.getUser;
 
@@ -44,7 +50,7 @@ export default {
             context.commit('setUser', user);
 
         },
-        async loadLogins(context: any, force = false) {
+        async loadLogins(context: any, force: boolean = false) {
 
             let logins: Array<AuthLogin>|null = context.getters.getLogins;
 
@@ -55,7 +61,7 @@ export default {
             context.commit('setLogins', logins);
 
         },
-        async loadSecurity(context: any, force = false) {
+        async loadSecurity(context: any, force: boolean = false) {
 
             let security: UserSecurity|null = context.getters.getSecurity;
 
@@ -64,6 +70,17 @@ export default {
             }
 
             context.commit('setSecurity', security);
+
+        },
+        async loadNotifications(context: any, force: boolean = false) {
+
+            let notifications: UserNotifications|null = context.getters.getNotifications;
+
+            if(!notifications || force) {
+                notifications = await UserNotifications.getNotifications();
+            }
+
+            context.commit('setNotifications', notifications);
 
         }
     },
@@ -79,6 +96,9 @@ export default {
         },
         getSecurity(state: VuexUser) : UserSecurity|null {
             return state.security;
+        },
+        getNotifications(state: VuexUser) : UserNotifications|null {
+            return state.notifications;
         }
     }
 }

@@ -7,6 +7,7 @@ import SubMenu from "../views/content/SubMenu.vue";
 import MyAccountGeneral from './../views/account/General.vue';
 import MyAccountLogins from './../views/account/Logins.vue';
 import MyAccountSecurity from './../views/account/Security.vue';
+import MyAccountNotifications from './../views/account/Notifications.vue';
 
 export default [
     <RouteRecordRaw> {
@@ -47,6 +48,14 @@ export default [
                         component: MyAccountSecurity,
                         meta: {
                             title: 'Security'
+                        }
+                    },
+                    <RouteRecordRaw> {
+                        name: 'notifications',
+                        path: 'notifications',
+                        component: MyAccountNotifications,
+                        meta: {
+                            title: 'Notifications'
                         }
                     }
                 ]

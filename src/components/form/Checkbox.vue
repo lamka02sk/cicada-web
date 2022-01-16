@@ -2,15 +2,15 @@
 
     <FormItem>
         
-        <Label class="cursor-pointer text-gray-700">
+        <Label class="cursor-pointer text-gray-700 pb-0">
             <input class="hidden" type="checkbox" v-model="modelValue[name]" :readonly="readonly">
             <span class="checkbox align-middle -ml-[3px]">
                 <span class="material-icons-outlined text-blue-700 align-middle" data-value="1">check_box</span>
                 <span class="material-icons-outlined text-gray-700 align-middle" data-value="0">check_box_outline_blank</span>
             </span>
-            <span class="align-middle ml-1 top-0.5 py-1 relative">{{ label }}</span>
+            <span class="align-middle ml-1 top-[2px] relative">{{ label }}</span>
         </Label>
-        <div class="relative w-full h-full">
+        <div class="relative w-full">
             <Validation :data="modelValue" :property="name" :novalidate="novalidate"></Validation>
             <RequiredIndicator v-bind="{ required, modelValue }" v-if="!novalidate"></RequiredIndicator>
         </div>

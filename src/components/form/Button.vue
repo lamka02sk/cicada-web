@@ -1,6 +1,6 @@
 <template>
 
-    <FormItem :class="`${!auto ? 'mt-6' : ''} ${$parent.center ? 'justify-center' : ''} ${small ? 'small' : ''} ${right ? 'justify-end' : ''}`">
+    <FormItem :class="`${!auto ? 'mt-6' : ''} ${center ? 'justify-center' : ''} ${small ? 'small' : ''} ${right ? 'justify-end' : ''}`">
         <button :class="`${color}
                 rounded shadow font-bold transition duration-200
                 focus:shadow-xl focus:outline-none active:shadow-xl
@@ -19,6 +19,7 @@
     
     import FormItem from './FormItem.vue'
     import ButtonStatus from './ButtonStatus.vue'
+    import {getCurrentInstance} from "vue";
     
     export default {
         emits: ['click'],
@@ -26,6 +27,7 @@
         props: ['label', 'value', 'disabled', 'type', 'color', 'statusType', 'statusShow', 'auto', 'small', 'right'],
         setup(props: any) {
             return {
+                center: !!getCurrentInstance()?.parent,
                 value: props.value ?? '',
                 type: props.type ?? 'button',
                 color: props.color ?? 'indigo'

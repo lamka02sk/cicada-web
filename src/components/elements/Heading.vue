@@ -11,7 +11,8 @@
         setup() {
             return {
                 classes: {
-                    h2: 'text-gray-700 text-2xl'
+                    h2: 'text-gray-700 text-2xl',
+                    h3: 'text-gray-700 text-xl'
                 }
             }
         }

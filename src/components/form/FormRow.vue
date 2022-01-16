@@ -1,24 +1,27 @@
 <template>
 
-    <div class="grid grid-flow-col auto-cols-auto gap-4" :class="{ center }">
+    <div :class="`grid ${grid} ${center ? 'center' : ''}`">
         <slot></slot>
     </div>
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
-    export default {
-        props: ['center'],
-        setup(props: any) {
-            return {
+    import {ref, watchEffect} from "vue";
+
+    const props = defineProps<{
+        center?: boolean,
+        column?: boolean
+    }>();
+    
+    const grid = ref<string>('');
             
-            }
-        }
-    }
+    watchEffect(() => {
+        grid.value = {
+            1: 'grid-flow-row auto-rows-auto gap-1.5',
+            0: 'grid-flow-col auto-cols-auto gap-4'
+        }[+(props.column || false)] ?? '';
+    })
 
 </script>
-
-<style scoped>
-
-</style>
