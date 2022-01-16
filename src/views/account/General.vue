@@ -34,9 +34,25 @@
     
         <Form @submit="changePassword">
             
-            <Heading tag="h2">Change password</Heading>
+            <Heading tag="h2" class="mt-4">Change password</Heading>
+    
+            <Text label="E-mail" :model-value="formData" name="email" v-show="false" autocomplete="email" type="email"></Text>
             
+            <FormRow>
+                <Password label="Old password" required="1" autocomplete="password" v-model="passwordFormData" name="old_password"></Password>
+            </FormRow>
             
+            <FormRow>
+                <Password label="New password" required="1" autocomplete="new-password" v-model="passwordFormData" name="password"></Password>
+                <Password label="Repeat new password" required="1" autocomplete="new-password" v-model="passwordFormData" name="password_repeat"></Password>
+            </FormRow>
+            
+            <FormRow>
+                <Button auto="1" type="submit" :status-show="passwordFormData._buttonStatus.show" :status-type="passwordFormData._buttonStatus.type">
+                    Change password
+                    <template v-slot:status>{{ passwordFormData._buttonStatus.label }}</template>
+                </Button>
+            </FormRow>
             
         </Form>
         
@@ -54,24 +70,38 @@
     import Button from "../../components/form/Button.vue";
     import Empty from  '../../components/notifications/Empty.vue';
     import Heading from "../../components/elements/Heading.vue";
+    import Password from "../../components/form/Password.vue";
     import {computed} from "vue";
     import {useStore} from "vuex";
     
     import User from "../../models/user/User";
+    import PasswordChange from "../../models/user/PasswordChange";
 
     export default {
-        components: { Form, FormRow, Text, Button, Empty, Heading },
+        components: { Form, FormRow, Text, Button, Empty, Heading, Password },
         setup() {
         
             const store = useStore();
             
             store.dispatch('user/loadUser', true);
             const formData = computed(() => <User>store.getters["user/getUser"]);
+            const passwordFormData = computed(() => <PasswordChange>store.getters["user/getPasswordChange"]);
             
             return {
                 formData,
+                passwordFormData,
                 saveFormData() {
                     formData.value.update();
+                },
+                async changePassword() {
+                    
+                    await passwordFormData.value.change();
+                    
+                    const passwordChange = new PasswordChange();
+                    passwordChange.fromJSON(passwordFormData.value);
+                    
+                    store.commit('user/setPasswordChange', passwordChange);
+                    
                 }
             }
             

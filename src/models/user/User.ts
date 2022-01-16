@@ -60,7 +60,7 @@ export default class User extends Model {
         try {
             await axios.put(`/user/update/self`, this.asObject());
         } catch(e: any) {
-            this._buttonStatus.display('error', `Error while saving user data: ${e}`);
+            this._buttonStatus.display('error', `Error: ${e}`);
             return;
         }
 

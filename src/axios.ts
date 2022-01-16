@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import store from './vuex/main'
 import Notification from "./models/system/Notification";
 import {Exception} from "sass";
@@ -38,6 +38,10 @@ axios.interceptors.response.use(response => {
     return response;
 
 }, error => {
+
+    if(error.response && error.response.data) {
+        throw `${error.response.data.status} [${error.response.data.message}]`;
+    }
 
     const notification = new Notification('error', 'Request failed', error, 10);
     store.dispatch('system/pushNotification', notification);

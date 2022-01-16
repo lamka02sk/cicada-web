@@ -1,11 +1,13 @@
 import AuthLogin from "../models/auth/AuthLogin";
 import User from "../models/user/User";
 import UserSecurity from "../models/user/UserSecurity";
+import PasswordChange from "../models/user/PasswordChange";
 
 interface VuexUser {
     user: User|null,
     logins: Array<AuthLogin>|null,
-    security: UserSecurity|null
+    security: UserSecurity|null,
+    passwordChange: PasswordChange
 }
 
 export default {
@@ -13,7 +15,8 @@ export default {
     state: () => (<VuexUser> {
         user: null,
         logins: null,
-        security: null
+        security: null,
+        passwordChange: new PasswordChange()
     }),
     mutations: {
         setUser(state: VuexUser, user: User|null) {
@@ -24,6 +27,9 @@ export default {
         },
         setSecurity(state: VuexUser, security: UserSecurity|null) {
             state.security = security;
+        },
+        setPasswordChange(state: VuexUser, passwordChange: PasswordChange) {
+            state.passwordChange = passwordChange;
         }
     },
     actions: {
@@ -64,6 +70,9 @@ export default {
     getters: {
         getUser(state: VuexUser) : User|null {
             return state.user;
+        },
+        getPasswordChange(state: VuexUser) : PasswordChange {
+            return state.passwordChange;
         },
         getLogins(state: VuexUser) : Array<AuthLogin>|null {
             return state.logins;
