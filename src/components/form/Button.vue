@@ -27,7 +27,7 @@
         props: ['label', 'value', 'disabled', 'type', 'color', 'statusType', 'statusShow', 'auto', 'small', 'right'],
         setup(props: any) {
             return {
-                center: !!getCurrentInstance()?.parent,
+                center: !!getCurrentInstance()?.parent?.props.center,
                 value: props.value ?? '',
                 type: props.type ?? 'button',
                 color: props.color ?? 'indigo'
