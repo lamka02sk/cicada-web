@@ -5,23 +5,23 @@
         <Heading tag="h2">E-mail notifications</Heading>
         
         <Fieldset legend="Authentication">
-            <FormRow column="1">
-                <Checkbox label="Successful login" v-model="notifications" name="auth_login" novalidate="1"></Checkbox>
-                <Checkbox label="Login attempt" v-model="notifications" name="auth_attempt" novalidate="1"></Checkbox>
-                <Checkbox label="Password change" v-model="notifications" name="auth_password_change" novalidate="1"></Checkbox>
+            <FormRow column>
+                <Checkbox label="Successful login" v-model="notifications" name="auth_login" novalidate></Checkbox>
+                <Checkbox label="Login attempt" v-model="notifications" name="auth_attempt" novalidate></Checkbox>
+                <Checkbox label="Password change" v-model="notifications" name="auth_password_change" novalidate></Checkbox>
             </FormRow>
         </Fieldset>
     
         <Fieldset legend="Deployment">
-            <FormRow column="1">
-                <Checkbox label="Started" v-model="notifications" name="deploy_start" novalidate="1"></Checkbox>
-                <Checkbox label="Finished" v-model="notifications" name="deploy_finish" novalidate="1"></Checkbox>
-                <Checkbox label="Failed" v-model="notifications" name="deploy_fail" novalidate="1"></Checkbox>
+            <FormRow column>
+                <Checkbox label="Started" v-model="notifications" name="deploy_start" novalidate></Checkbox>
+                <Checkbox label="Finished" v-model="notifications" name="deploy_finish" novalidate></Checkbox>
+                <Checkbox label="Failed" v-model="notifications" name="deploy_fail" novalidate></Checkbox>
             </FormRow>
         </Fieldset>
     
         <FormRow>
-            <Button type="submit" auto="1" :status-show="notifications._buttonStatus.show" :status-type="notifications._buttonStatus.type">
+            <Button type="submit" auto :status-show="notifications._buttonStatus.show" :status-type="notifications._buttonStatus.type">
                 Save changes
                 <template v-slot:status>{{ notifications._buttonStatus.label }}</template>
             </Button>
@@ -57,9 +57,3 @@
     }
 
 </script>
-
-<style lang="scss" scoped>
-
-
-
-</style>

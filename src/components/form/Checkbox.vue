@@ -18,7 +18,7 @@
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import {watch} from "vue";
     
@@ -26,23 +26,21 @@
     import FormItem from './FormItem.vue'
     import Validation from "./Validation.vue"
     import RequiredIndicator from "./RequiredIndicator.vue";
-
-    export default {
-        components: { Label, FormItem, Validation, RequiredIndicator },
-        emits: ['update:modelValue'],
-        props: ['label', 'modelValue', 'name', 'required', 'novalidate', 'readonly'],
-        setup(props: any, { emit }: any) {
+    
+    const props = defineProps<{
+        label: string,
+        modelValue: any,
+        name: string,
+        required: boolean,
+        novalidate: boolean,
+        readonly: boolean
+    }>();
+    
+    const emit = defineEmits(['update:modelValue']);
             
-            watch(() => props.modelValue[props.name], () => {
-                emit('update:modelValue', props.modelValue);
-            })
-            
-            return {
-            
-            }
-            
-        }
-    }
+    watch(() => props.modelValue[props.name], () => {
+        emit('update:modelValue', props.modelValue);
+    })
 
 </script>
 

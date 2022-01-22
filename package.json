@@ -2,9 +2,11 @@
   "name": "cicada-web",
   "version": "0.0.0",
   "scripts": {
-    "dev": "concurrently --kill-others \"vite\" \"tailwind-config-viewer -p 5007\"",
+    "dev": "concurrently --kill-others \"npm:vite\" \"npm:tailwind-config-viewer\"",
     "build": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "vite": "vite",
+    "tailwind-config-viewer": "tailwind-config-viewer -p 5007"
   },
   "dependencies": {
     "vue": "^3.2.26",

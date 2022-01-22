@@ -18,40 +18,29 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
-import {RouteRecordRaw, useRoute} from "vue-router";
-import {ref, watchEffect} from "vue";
-
-export default {
-    setup() {
+    import {RouteRecordRaw, useRoute} from "vue-router";
+    import {ref, watchEffect} from "vue";
+    
+    const route = useRoute();
+    const basePath = ref('/');
+    const siblings = ref<Array<RouteRecordRaw>>([]);
+    
+    watchEffect(() => {
         
-        const route = useRoute();
-        const basePath = ref('/');
-        const siblings = ref<Array<RouteRecordRaw>>([]);
+        basePath.value = '/';
+        const matched = route.matched.slice(0, -1);
         
-        watchEffect(() => {
-            
-            basePath.value = '/';
-            const matched = route.matched.slice(0, -1);
-            
-            matched.forEach(m => {
-                basePath.value += m.path + '/';
-            });
-            
-            basePath.value = basePath.value.replaceAll(/\/+/g, '/');
-            siblings.value = (route.matched[route.matched.length - 2] || { children: [] }).children;
-            
+        matched.forEach(m => {
+            basePath.value += m.path + '/';
         });
         
-        return {
-            route,
-            basePath,
-            siblings
-        }
-    }
-}
-
+        basePath.value = basePath.value.replaceAll(/\/+/g, '/');
+        siblings.value = (route.matched[route.matched.length - 2] || { children: [] }).children;
+        
+    });
+    
 </script>
 
 <style lang="scss" scoped>

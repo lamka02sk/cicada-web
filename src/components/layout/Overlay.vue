@@ -6,31 +6,14 @@
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
-import {ref, watchEffect} from "vue";
-
-export default {
-        props: ['show'],
-        setup(props: any) {
+    import {computed} from "vue";
     
-            const showClasses = ref<string>('');
+    const props = defineProps<{
+        show: boolean
+    }>();
     
-            watchEffect(() => {
-                showClasses.value = (props.show ?? false)
-                    ? 'opacity-100 visible'
-                    : 'opacity-0 invisible';
-            })
-            
-            return {
-                showClasses
-            }
-            
-        }
-    }
+    const showClasses = computed<string>(() => props.show ? 'opacity-100 visible' : 'opacity-0 invisible');
     
 </script>
-
-<style scoped>
-
-</style>

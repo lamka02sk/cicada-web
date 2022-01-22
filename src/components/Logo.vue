@@ -1,24 +1,17 @@
 <template>
     
-    <div class="logo font-brand text-gray-600 text-center" :class="large">cicada</div>
+    <div class="logo font-brand text-gray-600 text-center" :class="largeClass">cicada</div>
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
-    export default {
-        props: ['large'],
-        setup(props: any) {
-            return {
-                large: props.large ? 'text-5xl' : 'text-3xl'
-            }
-        }
-    }
+    import {computed} from "vue";
+
+    const props = defineProps<{
+        large?: boolean
+    }>();
+
+    const largeClass = computed(() => props.large ? 'text-5xl' : 'text-3xl');
     
 </script>
-
-<style scoped lang="scss">
-
-
-
-</style>

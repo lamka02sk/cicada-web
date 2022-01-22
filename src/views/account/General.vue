@@ -19,12 +19,12 @@
             </FormRow>
             
             <FormRow>
-                <Text label="First name" v-model="formData" placeholder="John" required="1" name="firstname"></Text>
-                <Text label="Last name" v-model="formData" placeholder="Doe" required="1" name="lastname"></Text>
+                <Text label="First name" v-model="formData" placeholder="John" required name="firstname"></Text>
+                <Text label="Last name" v-model="formData" placeholder="Doe" required name="lastname"></Text>
             </FormRow>
             
             <FormRow>
-                <Button auto="1" type="submit" :status-show="formData._buttonStatus.show" :status-type="formData._buttonStatus.type">
+                <Button auto type="submit" :status-show="formData._buttonStatus.show" :status-type="formData._buttonStatus.type">
                     Save changes
                     <template v-slot:status>{{ formData._buttonStatus.label }}</template>
                 </Button>
@@ -39,16 +39,16 @@
             <Text label="E-mail" :model-value="formData" name="email" v-show="false" autocomplete="email" type="email"></Text>
             
             <FormRow>
-                <Password label="Old password" required="1" autocomplete="password" v-model="passwordFormData" name="old_password"></Password>
+                <Password label="Old password" required autocomplete="password" v-model="passwordFormData" name="old_password"></Password>
             </FormRow>
             
             <FormRow>
-                <Password label="New password" required="1" autocomplete="new-password" v-model="passwordFormData" name="password"></Password>
-                <Password label="Repeat new password" required="1" autocomplete="new-password" v-model="passwordFormData" name="password_repeat"></Password>
+                <Password label="New password" required autocomplete="new-password" v-model="passwordFormData" name="password"></Password>
+                <Password label="Repeat new password" required autocomplete="new-password" v-model="passwordFormData" name="password_repeat"></Password>
             </FormRow>
             
             <FormRow>
-                <Button auto="1" type="submit" :status-show="passwordFormData._buttonStatus.show" :status-type="passwordFormData._buttonStatus.type">
+                <Button auto type="submit" :status-show="passwordFormData._buttonStatus.show" :status-type="passwordFormData._buttonStatus.type">
                     Change password
                     <template v-slot:status>{{ passwordFormData._buttonStatus.label }}</template>
                 </Button>
@@ -62,7 +62,7 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import Form from "../../components/form/Form.vue";
     import FormRow from "../../components/form/FormRow.vue";
@@ -76,36 +76,26 @@
     
     import User from "../../models/user/User";
     import PasswordChange from "../../models/user/PasswordChange";
-
-    export default {
-        components: { Form, FormRow, Text, Button, Empty, Heading, Password },
-        setup() {
         
-            const store = useStore();
-            
-            store.dispatch('user/loadUser', true);
-            const formData = computed(() => <User>store.getters["user/getUser"]);
-            const passwordFormData = computed(() => <PasswordChange>store.getters["user/getPasswordChange"]);
-            
-            return {
-                formData,
-                passwordFormData,
-                saveFormData() {
-                    formData.value.update();
-                },
-                async changePassword() {
-                    
-                    await passwordFormData.value.change();
-                    
-                    const passwordChange = new PasswordChange();
-                    passwordChange.fromJSON(passwordFormData.value);
-                    
-                    store.commit('user/setPasswordChange', passwordChange);
-                    
-                }
-            }
-            
-        }
+    const store = useStore();
+    
+    store.dispatch('user/loadUser', true);
+    const formData = computed(() => <User>store.getters["user/getUser"]);
+    const passwordFormData = computed(() => <PasswordChange>store.getters["user/getPasswordChange"]);
+    
+    function saveFormData() {
+        formData.value.update();
+    }
+    
+    async function changePassword() {
+        
+        await passwordFormData.value.change();
+        
+        const passwordChange = new PasswordChange();
+        passwordChange.fromJSON(passwordFormData.value);
+        
+        store.commit('user/setPasswordChange', passwordChange);
+        
     }
 
 </script>

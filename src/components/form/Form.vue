@@ -5,15 +5,3 @@
     </form>
     
 </template>
-
-<script lang="ts">
-    
-    export default {
-        emits: ['submit']
-    }
-
-</script>
-
-<style scoped>
-
-</style>

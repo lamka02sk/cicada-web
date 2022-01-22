@@ -12,101 +12,89 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import {ref, watch} from "vue";
     import Validator from "../../validator/Validator";
+    
+    const props = defineProps<{
+        data: any,
+        property: string,
+        novalidate: boolean
+    }>();
+    
+    const emit = defineEmits(['validate']);
+    
+    const valid = ref<boolean|null>(null);
+    const message = ref<string>('');
+    const messageRef = ref<HTMLElement|null>(null);
+    const messageHeight = ref<string>('0');
+    
+    if(props.property in (props.data._validator ?? {})) {
 
-    export default {
-        props: ['data', 'property', 'novalidate'],
-        emits: ['validate'],
-        setup(props: any, { emit }: any) {
-    
-            const valid = ref<boolean|null>(null);
-            const message = ref<string>('');
-            const messageRef = ref<HTMLElement|null>(null);
-            const messageHeight = ref<string>('0');
+        let equals: Array<string> = [];
+        
+        if(!props.novalidate) {
+
+            equals = [props.property];
+
+            if(props.data._validator[props.property].equals) {
+                equals.push(props.data._validator[props.property].equals);
+            }
+
+        }
+        
+        watch(() => [equals.map(e => props.data[e]), props.data._validator[props.property]._listener], async () => {
             
-            if(props.property in (props.data._validator ?? {})) {
-    
-                let equals: Array<string> = [];
+            const validator = new Validator(props.data);
+            valid.value = await validator.validateProperty(props.property);
+            message.value = validator.messages[props.property] ?? '';
+            
+            emit('validate', valid.value);
+            
+            if(messageRef.value) {
                 
-                if(!props.novalidate) {
-    
-                    equals = [props.property];
-    
-                    if(props.data._validator[props.property].equals) {
-                        equals.push(props.data._validator[props.property].equals);
-                    }
-    
+                if(valid.value) {
+                    messageHeight.value = '0';
+                    return;
                 }
                 
-                watch(() => [equals.map(e => props.data[e]), props.data._validator[props.property]._listener], async () => {
-                    
-                    const validator = new Validator(props.data);
-                    valid.value = await validator.validateProperty(props.property);
-                    message.value = validator.messages[props.property] ?? '';
-                    
-                    emit('validate', valid.value);
-                    
-                    if(messageRef.value) {
-                        
-                        if(valid.value) {
-                            messageHeight.value = '0';
+                const originalHeight = messageHeight.value;
+                
+                messageRef.value.classList.remove('duration-300');
+                messageHeight.value = 'auto';
+
+                setTimeout(() => {
+
+                    if(!messageRef.value) {
+                        return;
+                    }
+
+                    const height = messageRef.value.getBoundingClientRect().height;
+                    messageHeight.value = originalHeight;
+
+                    setTimeout(() => {
+
+                        if(!messageRef.value) {
                             return;
                         }
-                        
-                        const originalHeight = messageHeight.value;
-                        
-                        messageRef.value.classList.remove('duration-300');
-                        messageHeight.value = 'auto';
+
+                        messageRef.value.classList.add('duration-300');
 
                         setTimeout(() => {
-    
-                            if(!messageRef.value) {
-                                return;
-                            }
-    
-                            const height = messageRef.value.getBoundingClientRect().height;
-                            messageHeight.value = originalHeight;
-    
-                            setTimeout(() => {
-        
-                                if(!messageRef.value) {
-                                    return;
-                                }
-        
-                                messageRef.value.classList.add('duration-300');
-        
-                                setTimeout(() => {
-                                    messageHeight.value = `${height}px`;
-                                })
-        
-                            });
-    
-    
+                            messageHeight.value = `${height}px`;
                         })
-                        
-                        
-                    }
-                    
+
+                    });
+
+
                 })
+                
+                
             }
             
-            return {
-                valid,
-                message,
-                messageRef,
-                messageHeight
-            }
-            
-        }
+        })
     }
 
 </script>
 
-<style lang="scss" scoped>
-
-
-
-</style>

@@ -20,10 +20,10 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import Loading from "./../../components/form/Loading.vue";
-    import {ref, watch, watchEffect} from "vue";
+    import {computed, ref, watchEffect} from "vue";
     
     function getTextColor(type: string) : string {
         
@@ -37,52 +37,28 @@
         return colors[type] ?? colors['loading'];
         
     }
-
-    export default {
-        components: { Loading },
-        props: ['type', 'show'],
-        setup(props: any) {
-            
-            const content = ref<HTMLElement|null>(null);
-            const classes = ref<string>('');
-            const textColor = ref<string|null>(null);
-            
-            const width = ref<string>('0');
-            const maxWidth = ref<number>(0);
-            
-            watchEffect(() => {
     
-                if(content.value) {
-                    setTimeout(() => {
-                        if(!content.value) return;
-                        maxWidth.value = content.value.getBoundingClientRect().width;
-                    })
-                }
-                
-                textColor.value = getTextColor(props.type);
-                classes.value = (props.show ?? false) ? 'opacity-100 visible' : 'opacity-0 invisible';
-                
+    const props = defineProps<{
+        type: string,
+        show: boolean
+    }>();
+            
+    const content = ref<HTMLElement|null>(null);
+    const maxWidth = ref<number>(0);
+    
+    const width = computed(() => props.show ? `${maxWidth.value}px` : '0');
+    const classes = computed(() => props.show ? 'opacity-100 visible' : 'opacity-0 invisible');
+    const textColor = computed(() => getTextColor(props.type));
+    
+    watchEffect(() => {
+
+        if(content.value) {
+            setTimeout(() => {
+                if(!content.value) return;
+                maxWidth.value = content.value.getBoundingClientRect().width;
             })
-            
-            watch(maxWidth, () => {
-                width.value = (props.show ?? false) ? (`${maxWidth.value}px`) : '0';
-            })
-            
-            return {
-                content,
-                classes,
-                textColor,
-                width,
-                maxWidth
-            }
-            
         }
-    }
+        
+    });
 
 </script>
-
-<style scoped>
-
-
-
-</style>

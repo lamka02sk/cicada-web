@@ -2,10 +2,10 @@
 
     <teleport to="#alert">
     
-        <Overlay :show="show" @click="(closeOverlay ?? true) ? $emit('update:show', false) : () => {}">
+        <Overlay :show="show" @click="(closeOverlay) ? $emit('update:show', false) : () => {}">
             <div @click.stop="() => {}" :class="`bg-white rounded-lg shadow-2xl max-w-sm w-full p-8 text-sm text-gray-800 duration-500 relative ${showClasses} ${border}`">
                 <span class="material-icons-outlined cursor-pointer absolute top-4 right-4 text-gray-500 hover:text-red-600 duration-150"
-                      v-if="closeButton ?? true" @click="$emit('update:show', false)">cancel</span>
+                      v-if="closeButton" @click="$emit('update:show', false)">cancel</span>
                 <h2 :class="`text-xl font-semibold mb-4 pr-4 ${textColor}`">
                     <span class="material-icons-outlined align-middle mr-2" v-if="iconName">{{ iconName }}</span>
                     <span class="align-middle"><slot name="title"></slot></span>
@@ -22,10 +22,10 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
     
     import Overlay from "../layout/Overlay.vue";
-    import {ref, watchEffect} from "vue";
+    import {computed, ref, useSlots, watchEffect} from "vue";
     
     import Button from "../form/Button.vue";
 
@@ -73,40 +73,23 @@
         return colors[type];
     
     }
-
-    export default {
-        emits: ['update:show'],
-        components: { Overlay, Button },
-        props: ['show', 'type', 'closeButton', 'closeOverlay'],
-        setup(props: any, { slots }: any) {
-        
-            const showClasses = ref<string>('');
-            const border = ref<string>('');
-            const iconName = ref<string>('');
-            const textColor = ref<string>('');
-            
-            watchEffect(() => {
-                
-                showClasses.value = (props.show ?? false)
-                    ? 'scale-100'
-                    : 'scale-75';
-                
-                border.value = getBorder(props.type ?? 'default');
-                iconName.value = getIcon(props.type ?? 'default');
-                textColor.value = getText(props.type ?? 'default');
-                
-            })
-            
-            return {
-                showDefaultAction: !slots.actions,
-                showClasses,
-                border,
-                iconName,
-                textColor
-            }
-        
-        }
-    }
+    
+    const props = withDefaults(defineProps<{
+        show: boolean,
+        type: string,
+        closeButton: boolean,
+        closeOverlay: boolean
+    }>(), {
+        type: 'default'
+    });
+    
+    const slots = useSlots();
+    const showDefaultAction = computed<boolean>(() => !slots.actions);
+    
+    const showClasses = computed<string>(() => props.show ? 'scale-100' : 'scale-75');
+    const border = computed<string>(() => getBorder(props.type));
+    const iconName = computed<string>(() => getIcon(props.type));
+    const textColor = computed<string>(() => getText(props.type));
 
 </script>
 

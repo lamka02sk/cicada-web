@@ -19,7 +19,7 @@
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import {nanoid} from "nanoid";
     import {ref, watch} from "vue";
@@ -28,32 +28,26 @@
     import FormItem from './FormItem.vue'
     import Validation from "./Validation.vue";
 
-    export default {
-        emits: ['update:modelValue'],
-        components: { Label, FormItem, Validation },
-        props: ['label', 'modelValue', 'disabled', 'options', 'name', 'novalidate'],
-        setup(props: any, { emit }: any) {
-            
-            const uuid = ref(nanoid());
-            const hasRightPadding = ref<string|null>(null);
+    const props = defineProps<{
+        label: string,
+        modelValue: any,
+        disable: boolean,
+        options: any,
+        name: string,
+        novalidate: boolean
+    }>();
     
-            watch(() => props.modelValue[props.name], () => {
-                emit('update:modelValue', props.modelValue);
-            })
-            
-            return {
-                id: uuid,
-                hasRightPadding,
-                onValidate(valid: boolean|null) {
-                    hasRightPadding.value = valid !== null ? 'has-padding-right' : null;
-                }
-            }
-            
-        }
+    const emit = defineEmits(['update:modelValue']);
+    
+    const id = ref(nanoid());
+    const hasRightPadding = ref<string|null>(null);
+
+    watch(() => props.modelValue[props.name], () => {
+        emit('update:modelValue', props.modelValue);
+    });
+    
+    function onValidate(valid: boolean|null) {
+        hasRightPadding.value = valid !== null ? 'has-padding-right' : null;
     }
 
 </script>
-
-<style scoped>
-
-</style>

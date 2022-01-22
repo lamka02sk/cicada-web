@@ -14,7 +14,9 @@
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+
+    import {computed} from "vue";
 
     function getBackgroundColor(type: string) {
         
@@ -30,15 +32,15 @@
         return colors[type] ?? colors.default;
         
     }
+    
+    const props = withDefaults(defineProps<{
+        type: string,
+        icon: string|null
+    }>(), {
+        type: 'default',
+        icon: null
+    });
 
-    export default {
-        props: ['type', 'icon'],
-        setup(props: any) {
-            return {
-                background: getBackgroundColor(props.type),
-                icon: props.icon
-            }
-        }
-    }
+    const background = computed(() => getBackgroundColor(props.type));
 
 </script>

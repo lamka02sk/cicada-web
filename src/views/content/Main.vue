@@ -16,7 +16,7 @@
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import {useRoute} from "vue-router";
     import {ref, watchEffect} from "vue";
@@ -25,36 +25,25 @@
         title: string,
         url: string
     }
+            
+    const route = useRoute();
+    const routes = ref<Array<Breadcrumb>>([]);
+            
+    watchEffect(() => {
 
-    export default {
-        setup() {
-            
-            const route = useRoute();
-            const routes = ref<Array<Breadcrumb>>([]);
-            
-            watchEffect(() => {
-    
-                const tempRoutes: Array<any> = [];
-    
-                (route.matched.slice(1, -1) || []).forEach(r => {
-                    if(r.meta.title) {
-                        tempRoutes.push(<Breadcrumb>{
-                            title: r.meta.title,
-                            url: r.path
-                        });
-                    }
+        const tempRoutes: Array<any> = [];
+
+        (route.matched.slice(1, -1) || []).forEach(r => {
+            if(r.meta.title) {
+                tempRoutes.push(<Breadcrumb>{
+                    title: r.meta.title,
+                    url: r.path
                 });
-    
-                routes.value = tempRoutes;
-                
-            })
-            
-            return {
-                route,
-                routes
             }
-            
-        }
-    }
+        });
+
+        routes.value = tempRoutes;
+        
+    });
 
 </script>

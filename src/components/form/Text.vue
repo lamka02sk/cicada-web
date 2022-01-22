@@ -11,7 +11,7 @@
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import {nanoid} from "nanoid";
     import {ref, watch} from "vue";
@@ -20,35 +20,32 @@
     import FormItem from './FormItem.vue'
     import Validation from "./Validation.vue"
     import RequiredIndicator from "./RequiredIndicator.vue";
+    
+    const props = withDefaults(defineProps<{
+        label: string,
+        modelValue: any,
+        name: string,
+        type: string,
+        placeholder?: string,
+        required: boolean,
+        autocomplete: boolean,
+        novalidate: boolean,
+        readonly: boolean
+    }>(), {
+        type: 'text'
+    });
 
-    export default {
-        components: { Label, FormItem, Validation, RequiredIndicator },
-        emits: ['update:modelValue'],
-        props: ['label', 'modelValue', 'type', 'placeholder', 'name', 'required', 'autocomplete', 'novalidate', 'readonly'],
-        setup(props: any, { emit }: any) {
+    const emit = defineEmits(['update:modelValue']);
             
-            const uuid = ref(nanoid());
-            const hasRightPadding = ref<string|null>(null);
+    const id = ref(nanoid());
+    const hasRightPadding = ref<string|null>(null);
             
-            watch(() => props.modelValue[props.name], () => {
-                emit('update:modelValue', props.modelValue);
-            })
-            
-            return {
-                id: uuid,
-                type: props.type ?? 'text',
-                placeholder: props.placeholder ?? null,
-                hasRightPadding,
-                onValidate(valid: boolean|null) {
-                    hasRightPadding.value = valid !== null ? 'has-padding-right' : null;
-                }
-            }
-            
-        }
+    watch(() => props.modelValue[props.name], () => {
+        emit('update:modelValue', props.modelValue);
+    });
+    
+    function onValidate(valid: boolean|null) {
+        hasRightPadding.value = valid !== null ? 'has-padding-right' : null;
     }
 
 </script>
-
-<style scoped>
-
-</style>

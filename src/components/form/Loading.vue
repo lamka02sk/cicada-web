@@ -8,21 +8,10 @@
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
-    export default {
-        props: ['type', 'show'],
-        setup() {
-        
-        
-            
-        }
-    }
+    const props = defineProps<{
+        show: boolean
+    }>();
 
 </script>
-
-<style lang="scss" scoped>
-
-
-    
-</style>

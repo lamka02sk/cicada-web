@@ -7,11 +7,11 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
-    export default {
-        props: ['legend']
-    }
+    const props = defineProps<{
+        legend: string
+    }>();
 
 </script>
 

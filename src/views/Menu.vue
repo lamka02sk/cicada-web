@@ -31,13 +31,9 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import Logo from "../components/Logo.vue";
-
-    export default {
-        components: { Logo }
-    }
 
 </script>
 

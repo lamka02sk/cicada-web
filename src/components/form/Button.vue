@@ -15,25 +15,30 @@
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
     
     import FormItem from './FormItem.vue'
     import ButtonStatus from './ButtonStatus.vue'
-    import {getCurrentInstance} from "vue";
+    import {computed, getCurrentInstance} from "vue";
     
-    export default {
-        emits: ['click'],
-        components: { FormItem, ButtonStatus },
-        props: ['label', 'value', 'disabled', 'type', 'color', 'statusType', 'statusShow', 'auto', 'small', 'right'],
-        setup(props: any) {
-            return {
-                center: !!getCurrentInstance()?.parent?.props.center,
-                value: props.value ?? '',
-                type: props.type ?? 'button',
-                color: props.color ?? 'indigo'
-            }
-        }
-    }
+    const props = withDefaults(defineProps<{
+        label: string,
+        value: any,
+        disabled?: boolean,
+        type?: string,
+        color?: string,
+        statusType?: string,
+        statusShow?: boolean,
+        auto?: boolean,
+        small?: boolean,
+        right?: boolean
+    }>(), {
+        value: null,
+        type: 'button',
+        color: 'indigo'
+    });
+    
+    const center = computed(() => !!getCurrentInstance()?.parent?.props.center);
 
 </script>
 

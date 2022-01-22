@@ -16,7 +16,7 @@
                     <td>{{ login.ip_address.split('/')[0] }}</td>
                     <td>{{ formatDateTime(login.created_at) }}</td>
                     <td>
-                        <Button class="-my-1" auto="1" color="red" small="1" right="1" @click="disableLogin(login)">Disable</Button>
+                        <Button class="-my-1" auto color="red" small right @click="disableLogin(login)">Disable</Button>
                     </td>
                 </tr>
             </template>
@@ -48,7 +48,7 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     // @ts-ignore
     import UAParser from "ua-parser-js";
@@ -61,37 +61,27 @@
     import Empty from  '../../components/notifications/Empty.vue';
     import Heading from "../../components/elements/Heading.vue";
     import Button from "../../components/form/Button.vue";
+            
+    const store = useStore();
 
-    export default {
-        components: { Empty, Heading, Button },
-        setup() {
-            
-            const store = useStore();
+    store.dispatch('user/loadLogins', true);
+    const logins = computed(() => <Array<AuthLogin>>store.getters["user/getLogins"]);
     
-            store.dispatch('user/loadLogins', true);
-            const logins = computed(() => <Array<AuthLogin>>store.getters["user/getLogins"]);
+    function getBrowserInfo(ua: string) {
+        const parser = new UAParser(ua);
+        const browser = parser.getBrowser();
+        const os = parser.getOS();
+        return `${browser.name} ${browser.version} (${os.name}${os.version ? ' ' : ''}${os.version || ''})`;
+    }
     
-            return {
-                logins,
-                getBrowserInfo(ua: string) {
-                    const parser = new UAParser(ua);
-                    const browser = parser.getBrowser();
-                    const os = parser.getOS();
-                    return `${browser.name} ${browser.version} (${os.name}${os.version ? ' ' : ''}${os.version || ''})`;
-                },
-                formatDateTime,
-                async disableLogin(login: AuthLogin) {
-                    
-                    const authLogin: AuthLogin = new AuthLogin();
-                    authLogin.fromJSON(login);
-                    await authLogin.disable();
-                    
-                    store.dispatch('user/loadLogins', true);
-                    
-                }
-            }
-            
-        }
+    async function disableLogin(login: AuthLogin) {
+    
+        const authLogin: AuthLogin = new AuthLogin();
+        authLogin.fromJSON(login);
+        await authLogin.disable();
+    
+        await store.dispatch('user/loadLogins', true);
+    
     }
 
 </script>

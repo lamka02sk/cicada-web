@@ -23,26 +23,16 @@
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import Menu from "./views/Menu.vue";
     import Main from "./views/Main.vue";
     import {useStore} from "vuex";
     import {computed} from "vue";
-    
-    export default {
-        components: { Menu, Main },
-        setup() {
             
-            const store = useStore();
-            
-            return {
-                auth: computed(() => {
-                    return store.getters["auth/hasSession"];
-                })
-            }
-            
-        }
-    }
+    const store = useStore();
+    const auth = computed(() => {
+        return store.getters["auth/hasSession"];
+    });
 
 </script>

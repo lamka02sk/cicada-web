@@ -6,14 +6,10 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
-    export default {
-        props: ['id']
-    }
+    const props = defineProps<{
+        id: string
+    }>();
 
 </script>
-
-<style scoped>
-
-</style>

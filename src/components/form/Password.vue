@@ -11,7 +11,7 @@
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import {nanoid} from "nanoid";
     import {ref, watch} from "vue";
@@ -20,34 +20,28 @@
     import FormItem from './FormItem.vue'
     import Validation from "./Validation.vue"
     import RequiredIndicator from "./RequiredIndicator.vue";
-
-    export default {
-        components: { Label, FormItem, Validation, RequiredIndicator },
-        emits: ['update:modelValue'],
-        props: ['label', 'modelValue', 'placeholder', 'name', 'required', 'autocomplete', 'novalidate'],
-        setup(props: any, { emit }: any) {
+    
+    const props = defineProps<{
+        label: string,
+        modelValue: any,
+        placeholder?: string,
+        name: string,
+        required: boolean,
+        autocomplete?: string,
+        novalidate: boolean
+    }>();
+    
+    const emit = defineEmits(['update:modelValue'])
             
-            const uuid = ref(nanoid());
-            const hasRightPadding = ref<string|null>(null);
+    const id = ref(nanoid());
+    const hasRightPadding = ref<string|null>(null);
             
-            watch(() => props.modelValue[props.name], () => {
-                emit('update:modelValue', props.modelValue);
-            })
-            
-            return {
-                id: uuid,
-                placeholder: props.placeholder ?? null,
-                hasRightPadding,
-                onValidate(valid: boolean|null) {
-                    hasRightPadding.value = valid !== null ? 'has-padding-right' : null;
-                }
-            }
-            
-        }
+    watch(() => props.modelValue[props.name], () => {
+        emit('update:modelValue', props.modelValue);
+    })
+    
+    function onValidate(valid: boolean|null) {
+        hasRightPadding.value = valid !== null ? 'has-padding-right' : null;
     }
 
 </script>
-
-<style scoped>
-
-</style>

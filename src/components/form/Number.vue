@@ -11,7 +11,7 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import {nanoid} from "nanoid";
     import {ref, watch} from "vue";
@@ -20,38 +20,31 @@
     import FormItem from './FormItem.vue'
     import Validation from "./Validation.vue"
     import RequiredIndicator from "./RequiredIndicator.vue";
-
-    export default {
-        components: { Label, FormItem, Validation, RequiredIndicator },
-        props: ['label', 'modelValue', 'placeholder', 'min', 'max', 'step', 'name', 'required', 'autocomplete', 'novalidate'],
-        setup(props: any, { emit }: any) {
-            
-            const uuid = ref<string>(nanoid());
-            const hasRightPadding = ref<string|null>(null);
     
-            watch(() => props.modelValue[props.name], () => {
-                emit('update:modelValue', props.modelValue);
-            })
+    const props = defineProps<{
+        label: string,
+        modelValue: any,
+        placeholder?: string,
+        min?: number,
+        max?: number,
+        step?: number,
+        name: string,
+        required: boolean,
+        autocomplete?: string,
+        novalidate: boolean
+    }>();
+    
+    const emit = defineEmits(['update:modelValue']);
             
-            return {
-                id: uuid,
-                placeholder: props.placeholder ?? null,
-                min: props.min ?? null,
-                max: props.max ?? null,
-                step: props.step ?? null,
-                hasRightPadding,
-                onValidate(valid: boolean|null) {
-                    hasRightPadding.value = valid !== null ? 'has-padding-right' : null;
-                }
-            }
-            
-        }
+    const id = ref<string>(nanoid());
+    const hasRightPadding = ref<string|null>(null);
+    
+    watch(() => props.modelValue[props.name], () => {
+        emit('update:modelValue', props.modelValue);
+    });
+    
+    function onValidate(valid: boolean|null) {
+        hasRightPadding.value = valid !== null ? 'has-padding-right' : null;
     }
 
 </script>
-
-<style lang="scss" scoped>
-
-
-
-</style>

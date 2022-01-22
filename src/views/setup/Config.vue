@@ -2,7 +2,7 @@
 
     <ScreenCenter class="h-full max-w-md w-full mx-auto md:px-12 px-4 py-8">
         
-        <Logo large="1"></Logo>
+        <Logo large></Logo>
         <h1 class="text-xl text-gray-600 my-4 uppercase text-center">Server connection</h1>
         
         <Message type="tip" icon="tips_and_updates">
@@ -17,15 +17,15 @@
                 <Select label="Protocol" :options="protocolOptions" name="protocol" v-model="configuration" @update:modelValue="changePort"></Select>
             </FormRow>
             <FormRow>
-                <Text label="Domain or IP address" placeholder="example.com" name="domain" v-model="configuration" required="1"></Text>
+                <Text label="Domain or IP address" placeholder="example.com" name="domain" v-model="configuration" required></Text>
             </FormRow>
             <FormRow>
-                <Number label="Port" name="port" v-model="configuration" :min="1" :max="65535" :step="1" required="1"></Number>
+                <Number label="Port" name="port" v-model="configuration" :min="1" :max="65535" :step="1" required></Number>
             </FormRow>
             <FormRow>
-                <Text label="Path" name="path" v-model="configuration" required="1"></Text>
+                <Text label="Path" name="path" v-model="configuration" required></Text>
             </FormRow>
-            <FormRow :center="true">
+            <FormRow center>
                 <Button type="submit" :disabled="submitDisabled" :status-type="status.type" :status-show="status && status.show">
                     <slot>Check connection</slot>
                     <template v-slot:status>
@@ -44,7 +44,7 @@
     
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 
     import {ref, watchEffect} from 'vue';
     import {useStore} from 'vuex';
@@ -62,99 +62,85 @@
     import Alert from "../../components/notifications/Alert.vue";
     import Validator from "../../validator/Validator";
     import {useRouter} from "vue-router";
-
-    export default {
-        components: { Logo, Message, ScreenCenter, Form, FormRow, Select, Text, Number, Button, Alert },
-        setup() {
             
-            const store = useStore();
-            const router = useRouter();
-            const configuration = ref<Connection|null>(null);
-            
-            store.commit('config/setConnectionValidity', false);
-            
-            watchEffect(async () => {
-                configuration.value = <Connection>await store.dispatch('config/getConnectionConfig');
-            });
-            
-            const showAlert = ref<boolean>(false);
-            const submitDisabled = ref<boolean>(false);
-            const status = ref<any>({});
-            
-            return {
-                showAlert,
-                status,
-                submitDisabled,
-                protocolOptions: [
-                    { value: 'http', title: 'http://' },
-                    { value: 'https', title: 'https://' }
-                ],
-                configuration,
-                changePort(value: Connection|null) {
-                    if(configuration.value && value) {
-                        configuration.value.port = value.protocol === 'http' ? 80 : 443;
-                    }
-                },
-                async checkConnection() {
-                    
-                    if(!configuration.value) {
-                        return;
-                    }
-                    
-                    submitDisabled.value = true;
-                    const validator = new Validator(configuration.value);
-
-                    if(!(await validator.validate())) {
-                        showAlert.value = true;
-                        submitDisabled.value = false;
-                        return;
-                    }
-                    
-                    status.value = {
-                        type: 'loading',
-                        show: true,
-                        label: 'Connecting'
-                    };
-                    
-                    if(await configuration.value.test()) {
-                        
-                        setTimeout(async () => {
+    const store = useStore();
+    const router = useRouter();
+    const configuration = ref<Connection|null>(null);
     
-                            status.value = {
-                                type: 'success',
-                                show: true,
-                                label: 'Successfully connected'
-                            }
-                            
-                            store.commit('config/setConnectionValidity', true);
-                            await store.dispatch('config/saveConnectionConfig');
-                            await router.push({ name: 'auth_login' });
-                            
-                        }, 500)
-                        
-                    } else {
-                        
-                        setTimeout(() => {
-                            
-                            status.value = {
-                                type: 'error',
-                                show: true,
-                                label: 'Connection failed'
-                            }
-                            
-                            submitDisabled.value = false;
-                            
-                        }, 500)
-                        
-                    }
-                    
-                }
-            }
+    store.commit('config/setConnectionValidity', false);
+    
+    watchEffect(async () => {
+        configuration.value = <Connection>await store.dispatch('config/getConnectionConfig');
+    });
+    
+    const showAlert = ref<boolean>(false);
+    const submitDisabled = ref<boolean>(false);
+    const status = ref<any>({});
+            
+    const protocolOptions = [
+        { value: 'http', title: 'http://' },
+        { value: 'https', title: 'https://' }
+    ];
+    
+    function changePort(value: Connection|null) {
+        if(configuration.value && value) {
+            configuration.value.port = value.protocol === 'http' ? 80 : 443;
         }
+    }
+    
+    async function checkConnection() {
+        
+        if(!configuration.value) {
+            return;
+        }
+        
+        submitDisabled.value = true;
+        const validator = new Validator(configuration.value);
+
+        if(!(await validator.validate())) {
+            showAlert.value = true;
+            submitDisabled.value = false;
+            return;
+        }
+        
+        status.value = {
+            type: 'loading',
+            show: true,
+            label: 'Connecting'
+        };
+        
+        if(await configuration.value.test()) {
+            
+            setTimeout(async () => {
+
+                status.value = {
+                    type: 'success',
+                    show: true,
+                    label: 'Successfully connected'
+                }
+                
+                store.commit('config/setConnectionValidity', true);
+                await store.dispatch('config/saveConnectionConfig');
+                await router.push({ name: 'auth_login' });
+                
+            }, 500)
+            
+        } else {
+            
+            setTimeout(() => {
+                
+                status.value = {
+                    type: 'error',
+                    show: true,
+                    label: 'Connection failed'
+                }
+                
+                submitDisabled.value = false;
+                
+            }, 500)
+            
+        }
+        
     }
 
 </script>
-
-<style scoped>
-
-</style>
