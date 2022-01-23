@@ -31,6 +31,13 @@ export default class PasswordChange extends Model {
 
     public async change() {
 
+        const valid = await this.validate();
+
+        if(!valid) {
+            // TODO > Alert
+            return;
+        }
+
         this._buttonStatus.display('loading', 'Changing password');
 
         try {

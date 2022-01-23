@@ -25,18 +25,14 @@ export default class Session extends Auth {
 
     }
 
-    public async logout() : Promise<boolean> {
+    public async logout() {
+
         try {
             await axios.get(`/auth/logout`);
-            Session.forceLogout();
-            return true;
-        } catch(e) {
-            return false;
-        }
-    }
+        } catch(e) {}
 
-    public static forceLogout() {
         localStorage.removeItem(Session._ls_key);
+
     }
 
     public static async restore() {

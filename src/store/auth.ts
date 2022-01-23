@@ -30,9 +30,8 @@ export const useAuthStore = defineStore('auth', {
         },
 
         async logout() {
-            if(await this.session.logout()) {
-                this.$reset();
-            }
+            await this.session.logout();
+            this.$reset();
         },
 
         async isSignedIn() : Promise<boolean> {

@@ -1,6 +1,8 @@
 <template>
+    
+    <Loading show large v-if="loading"></Loading>
 
-    <div v-if="logins !== null">
+    <div v-else-if="logins.length">
     
         <Heading tag="h2">Active logins</Heading>
         <table>
@@ -53,19 +55,23 @@
     // @ts-ignore
     import UAParser from "ua-parser-js";
     
-    import {useStore} from "vuex";
-    import {computed} from "vue";
+    import {ref} from "vue";
     import {formatDateTime} from '../../datetime';
     
     import AuthLogin from "../../models/auth/AuthLogin";
     import Empty from  '../../components/notifications/Empty.vue';
     import Heading from "../../components/elements/Heading.vue";
     import Button from "../../components/form/Button.vue";
-            
-    const store = useStore();
-
-    store.dispatch('user/loadLogins', true);
-    const logins = computed(() => <Array<AuthLogin>>store.getters["user/getLogins"]);
+    import Loading from "../../components/form/Loading.vue";
+    
+    const loading = ref(true);
+    const logins = ref<Array<AuthLogin>>([]);
+    
+    loadLogins();
+    
+    function loadLogins() {
+        AuthLogin.getAll().then(l => logins.value = l ?? logins.value).finally(() => loading.value = false);
+    }
     
     function getBrowserInfo(ua: string) {
         const parser = new UAParser(ua);
@@ -74,14 +80,9 @@
         return `${browser.name} ${browser.version} (${os.name}${os.version ? ' ' : ''}${os.version || ''})`;
     }
     
-    async function disableLogin(login: AuthLogin) {
-    
-        const authLogin: AuthLogin = new AuthLogin();
-        authLogin.fromJSON(login);
-        await authLogin.disable();
-    
-        await store.dispatch('user/loadLogins', true);
-    
+    async function disableLogin(login: any) {
+        await login.disable();
+        loadLogins();
     }
 
 </script>

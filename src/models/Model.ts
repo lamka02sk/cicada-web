@@ -31,6 +31,19 @@ export default class Model {
 
     }
 
+    public static multipleFromJSON<Class extends Model>(instance: Function, data: Array<any>) : Array<Class> {
+
+        return data.map(item => {
+
+            const object: Class = instance();
+            object.fromJSON(item);
+
+            return object;
+
+        });
+
+    }
+
     public asObject() : any {
 
         const data = {};

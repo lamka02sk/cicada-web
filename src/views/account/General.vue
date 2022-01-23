@@ -1,8 +1,10 @@
 <template>
-
-    <div v-if="formData && passwordFormData">
     
-        <Form @submit="saveFormData">
+    <Loading show large v-if="loading"></Loading>
+
+    <div v-else-if="formData.isLoaded()">
+    
+        <Form @submit.prevent="saveFormData">
             
             <Heading tag="h2">Hi, <strong>{{ formData.firstname }} {{ formData.lastname }}</strong>, this page is all about you</Heading>
             
@@ -32,7 +34,7 @@
             
         </Form>
 
-        <Form @submit="changePassword">
+        <Form @submit.prevent="changePassword">
             
             <Heading tag="h2" class="mt-4">Change password</Heading>
     
@@ -71,31 +73,24 @@
     import Empty from  '../../components/notifications/Empty.vue';
     import Heading from "../../components/elements/Heading.vue";
     import Password from "../../components/form/Password.vue";
-    import {computed} from "vue";
-    import {useStore} from "vuex";
+    import {ref} from "vue";
     
     import User from "../../models/user/User";
     import PasswordChange from "../../models/user/PasswordChange";
-        
-    const store = useStore();
+    import Loading from "../../components/form/Loading.vue";
     
-    store.dispatch('user/loadUser', true);
-    const formData = computed(() => <User>store.getters["user/getUser"]);
-    const passwordFormData = computed(() => <PasswordChange>store.getters["user/getPasswordChange"]);
+    const loading = ref(true);
+    const formData = ref(new User());
+    const passwordFormData = ref(new PasswordChange());
+    
+    User.getAuthenticated().then(u => formData.value = u ?? formData.value).finally(() => loading.value = false);
     
     function saveFormData() {
         formData.value.update();
     }
     
-    async function changePassword() {
-        
-        await passwordFormData.value.change();
-        
-        const passwordChange = new PasswordChange();
-        passwordChange.fromJSON(passwordFormData.value);
-        
-        store.commit('user/setPasswordChange', passwordChange);
-        
+    function changePassword() {
+        passwordFormData.value.change();
     }
 
 </script>

@@ -4,7 +4,7 @@
         <button :class="`${color}
                 rounded shadow font-bold transition duration-200
                 focus:shadow-xl focus:outline-none active:shadow-xl
-            `" @click="$emit('click', value)"
+            `" @click.stop="emit('click', value)"
             :disabled="disabled" :type="type">
             <slot></slot>
         </button>
@@ -36,6 +36,7 @@
         color: 'indigo'
     });
     
+    const emit = defineEmits(['click']);
     const center = computed(() => !!getCurrentInstance()?.parent?.props.center);
 
 </script>

@@ -35,10 +35,9 @@
     
     const props = withDefaults(defineProps<{
         type: string,
-        icon: string|null
+        icon?: string
     }>(), {
-        type: 'default',
-        icon: null
+        type: 'default'
     });
 
     const background = computed(() => getBackgroundColor(props.type));

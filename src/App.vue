@@ -30,6 +30,7 @@
     import {useAuthStore} from "./store/auth";
     import {computed} from "vue";
     
-    const auth = computed(() => useAuthStore().authenticated);
+    const store = useAuthStore();
+    const auth = computed(() => store.authenticated);
 
 </script>

@@ -1,6 +1,8 @@
 <template>
+    
+    <Loading show large v-if="loading"></Loading>
 
-    <Form v-if="notifications" @submit="saveNotifications">
+    <Form v-else-if="notifications.isLoaded()" @submit.prevent="saveNotifications">
         
         <Heading tag="h2">E-mail notifications</Heading>
         
@@ -35,8 +37,7 @@
 
 <script setup lang="ts">
 
-    import {computed} from "vue";
-    import {useStore} from "vuex";
+    import {ref} from "vue";
 
     import Empty from '../../components/notifications/Empty.vue';
     import Form from "../../components/form/Form.vue";
@@ -46,11 +47,12 @@
     import Heading from "../../components/elements/Heading.vue";
     import Fieldset from "../../components/form/Fieldset.vue";
     import UserNotifications from "../../models/user/UserNotifications";
+    import Loading from "../../components/form/Loading.vue";
 
-    const store = useStore();
-
-    store.dispatch('user/loadNotifications', true);
-    const notifications = computed(() => <UserNotifications>store.getters['user/getNotifications']);
+    const loading = ref(true);
+    const notifications = ref(new UserNotifications());
+    
+    UserNotifications.getNotifications().then(n => notifications.value = n ?? notifications.value).finally(() => loading.value = false);
     
     function saveNotifications() {
         notifications.value.update();

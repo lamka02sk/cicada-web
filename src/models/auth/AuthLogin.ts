@@ -16,7 +16,7 @@ export default class AuthLogin extends Model {
 
         try {
             const response = await axios.get(`/user/logins`);
-            return response.data?.data?.logins ?? [];
+            return Model.multipleFromJSON(() => new AuthLogin(), response.data?.data?.logins ?? []);
         } catch(e) {
             return null;
         }

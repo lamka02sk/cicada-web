@@ -1,10 +1,12 @@
 <template>
-
-    <div v-if="security">
+    
+    <Loading show large v-if="loading"></Loading>
+    
+    <div v-else-if="security">
     
         <Heading tag="h2" class="mb-4">Login management</Heading>
     
-        <Form @submit="saveFormData">
+        <Form @submit.prevent="saveFormData">
             
             <FormRow>
                 <Number label="Automatic logout (days)" v-model="security" name="login_duration" :min="1" :max="365"></Number>
@@ -49,8 +51,7 @@
 
 <script setup lang="ts">
 
-    import {computed, ref} from "vue";
-    import {useStore} from "vuex";
+    import {ref} from "vue";
     import {useRouter} from "vue-router";
     import axios from "axios";
     
@@ -65,14 +66,16 @@
     import Alert from "../../components/notifications/Alert.vue";
     import Heading from "../../components/elements/Heading.vue";
     import {useAuthStore} from "../../store/auth";
+    import Loading from "../../components/form/Loading.vue";
             
     const showResetTokenConfirmation = ref<boolean>(false);
-    const store = useStore();
     const router = useRouter();
     const auth = useAuthStore();
-
-    store.dispatch('user/loadSecurity', true);
-    const security = computed(() => <UserSecurity>store.getters['user/getSecurity']);
+    
+    const loading = ref(true);
+    const security = ref(new UserSecurity());
+    
+    UserSecurity.getSecurity().then(s => security.value = s ?? security.value).finally(() => loading.value = false);
     
     function saveFormData() {
         security.value.update();

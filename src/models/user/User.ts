@@ -50,6 +50,13 @@ export default class User extends Model {
 
     public async update() {
 
+        const valid = await this.validate();
+
+        if(!valid) {
+            // TODO > Alert
+            return;
+        }
+
         this._buttonStatus.display('loading', 'Saving user data');
 
         if(!this.uuid) {
