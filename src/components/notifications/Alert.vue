@@ -2,7 +2,7 @@
 
     <teleport to="#alert">
     
-        <Overlay :show="show" @click="(closeOverlay) ? $emit('update:show', false) : () => {}">
+        <Overlay :show="!!show" @click="(closeOverlay) ? $emit('update:show', false) : () => {}">
             <div @click.stop="() => {}" :class="`bg-white rounded-lg shadow-2xl max-w-sm w-full p-8 text-sm text-gray-800 duration-500 relative ${showClasses} ${border}`">
                 <span class="material-icons-outlined cursor-pointer absolute top-4 right-4 text-gray-500 hover:text-red-600 duration-150"
                       v-if="closeButton" @click="$emit('update:show', false)">cancel</span>
@@ -75,10 +75,10 @@
     }
     
     const props = withDefaults(defineProps<{
-        show: boolean,
-        type: string,
-        closeButton: boolean,
-        closeOverlay: boolean
+        show?: boolean,
+        type?: string,
+        closeButton?: boolean,
+        closeOverlay?: boolean
     }>(), {
         type: 'default'
     });

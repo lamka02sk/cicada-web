@@ -3,7 +3,7 @@
     <FormItem>
         <Label :id="id">{{ label }}</Label>
         <div class="relative w-full h-full">
-            <select :class="hasRightPadding" :id="id" v-model="modelValue[name]" :disabled="disabled">
+            <select :class="hasRightPadding" :id="id" v-model="modelValue[name]" :disabled="disable">
                 <template v-for="option in options">
                     <option v-if="!Array.isArray(option)" :value="option.value">{{ option.title }}</option>
                     <optgroup v-else :label="option[0]">
@@ -30,11 +30,11 @@
 
     const props = defineProps<{
         label: string,
-        modelValue: any,
-        disable: boolean,
-        options: any,
         name: string,
-        novalidate: boolean
+        modelValue: any,
+        options: any,
+        disable?: boolean,
+        novalidate?: boolean
     }>();
     
     const emit = defineEmits(['update:modelValue']);

@@ -20,7 +20,7 @@
     const props = defineProps<{
         data: any,
         property: string,
-        novalidate: boolean
+        novalidate?: boolean
     }>();
     
     const emit = defineEmits(['validate']);

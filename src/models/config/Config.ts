@@ -3,19 +3,16 @@ import axios from "axios";
 
 export default class Config extends Model {
 
-    protected _configured: boolean = true;
-
     protected readonly _resource_url: string = '';
     protected readonly _ls_key: string = '';
 
     constructor() {
         super();
-        this.load().then(() => {});
     }
 
     public async load() {
 
-        if(!this._resource_url || !this._configured) {
+        if(!this._resource_url && !this._loaded) {
             return;
         }
 
@@ -34,9 +31,7 @@ export default class Config extends Model {
                         this[prop] = configuration?.[prop]
                     });
 
-                    this._configured = true;
                     this._loaded = true;
-
                     return;
 
                 }
@@ -45,47 +40,44 @@ export default class Config extends Model {
 
         }
 
-        try {
-
-            let response = null;
+        if(this._resource_url) {
 
             try {
-                response = await axios.get(this._resource_url);
-            } catch(e) {}
 
-            if(response && response.data) {
+                let response = null;
 
-                Object.entries(response.data).forEach((key: any, value: any) => {
-                    // @ts-ignore
-                    this[key] = value;
-                });
+                try {
+                    response = await axios.get(this._resource_url);
+                } catch (e) {
+                }
 
-                this._configured = true;
-                this._loaded = true;
+                if (response && response.data) {
 
-                return;
+                    Object.entries(response.data).forEach((key: any, value: any) => {
+                        // @ts-ignore
+                        this[key] = value;
+                    });
 
-            }
+                    this._loaded = true;
+                    return;
 
-        } catch(_) {}
+                }
 
-        this._configured = false;
+            } catch (_) {}
+
+        }
+
+        this._loaded = false;
 
     }
 
-    save() : boolean {
+    public save() : boolean {
 
         if(!this._ls_key) {
             return false;
         }
 
-        const serialize = {};
-        Object.keys(this).forEach(prop => {
-            if(prop.charAt(0) === '_') return;
-            serialize[prop] = this[prop]
-        });
-
-        localStorage.setItem(this._ls_key, JSON.stringify(serialize));
+        localStorage.setItem(this._ls_key, JSON.stringify(this.asObject()));
         return true;
 
     }

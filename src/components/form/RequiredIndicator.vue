@@ -5,8 +5,9 @@
 <script setup lang="ts">
 
     const props = defineProps<{
-        required: boolean,
-        modelValue: any
+        modelValue: any,
+        name: string,
+        required?: boolean,
     }>();
 
 </script>

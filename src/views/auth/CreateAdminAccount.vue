@@ -7,7 +7,7 @@
         
         <p class="text-sm text-gray-800 text-center mb-6">This account will be the main account with full access to all settings and deployment options</p>
         
-        <Form v-if="formData" @submit="createAccount">
+        <Form v-if="formData" @submit.prevent="createAccount">
             
             <FormRow>
                 <Text label="E-mail" name="email" type="email" placeholder="admin@cicada.cc" v-model="formData" required autocomplete="email"></Text>
@@ -27,10 +27,10 @@
             </FormRow>
             
             <FormRow :center="true">
-                <Button type="submit" :disabled="submitDisabled" :status-show="status && status.show" :status-type="status.type">
+                <Button type="submit" :disabled="submitDisabled" :status-show="formData._buttonStatus.show" :status-type="formData._buttonStatus.type">
                     <slot>Create account</slot>
                     <template v-slot:status>
-                        {{ status.label }}
+                        {{ formData._buttonStatus.label }}
                     </template>
                 </Button>
             </FormRow>
@@ -39,7 +39,7 @@
     
     </ScreenCenter>
     
-    <Alert v-model:show="showAlert" type="danger" :close-button="false">
+    <Alert v-model:show="showAlert" type="danger" close-overlay>
         <template v-slot:title>Invalid data</template>
         Please check if all fields in the form are properly filled
     </Alert>
@@ -49,7 +49,6 @@
 <script setup lang="ts">
 
     import {ref} from "vue";
-    import {useStore} from "vuex";
     import {useRouter} from "vue-router";
 
     import ScreenCenter from "./../../components/layout/ScreenCenter.vue";
@@ -60,72 +59,35 @@
     import Button from "../../components/form/Button.vue";
     import Password from "../../components/form/Password.vue";
     import Alert from "../../components/notifications/Alert.vue";
-    
     import Account from "../../models/auth/Account";
-    import Validator from "../../validator/Validator";
-            
-    const store = useStore();
+    import {useGeneralStore} from "../../store/general";
+    
     const router = useRouter();
     
     (async () => {
-        if(await store.dispatch('system/isReady')) {
-            return router.push({ name: 'auth_login' });
+        if(await useGeneralStore().isServerReady()) {
+            await router.push({ name: 'auth_login' });
         }
     })();
     
-    const formData = ref<Account>(store.getters["auth/getRegisterForm"]);
+    const formData = ref(new Account());
     const showAlert = ref<boolean>(false);
     const submitDisabled = ref<boolean>(false);
-    const status = ref<any>({});
     
     async function createAccount() {
 
-        if(!formData.value) {
-            return;
-        }
-
-        submitDisabled.value = true;
-        const validator = new Validator(formData.value);
-
-        if(!(await validator.validate())) {
+        if(!(await formData.value.validate())) {
             showAlert.value = true;
-            submitDisabled.value = false;
             return;
         }
-
-        status.value = {
-            type: 'loading',
-            show: true,
-            label: 'Creating account'
-        };
+    
+        submitDisabled.value = true;
         
-        setTimeout(async () => {
-
-            const response = await store.dispatch('auth/createAccount');
-
-            if(response?.data?.success) {
-
-                status.value = {
-                    type: 'success',
-                    show: true,
-                    label: 'Account was created'
-                };
-
-                await router.push({name: 'auth_login'});
-
-            } else {
-
-                submitDisabled.value = false;
-
-                status.value = {
-                    type: 'error',
-                    show: true,
-                    label: 'Failed to create account'
-                };
-
-            }
-
-        }, 500);
+        if(await formData.value.create()) {
+            await router.push({name: 'auth_login'});
+        }
+    
+        submitDisabled.value = false;
         
     }
 

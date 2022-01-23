@@ -5,7 +5,7 @@
         <div class="relative w-full h-full">
             <input :class="hasRightPadding" :id="id" :type="type" v-model="modelValue[name]" :placeholder="placeholder" :autocomplete="autocomplete" :readonly="readonly">
             <Validation :data="modelValue" :property="name" @validate="onValidate" :novalidate="novalidate"></Validation>
-            <RequiredIndicator v-bind="{ required, modelValue }" v-if="!novalidate"></RequiredIndicator>
+            <RequiredIndicator v-bind="{ required, name, modelValue }" v-if="!novalidate"></RequiredIndicator>
         </div>
     </FormItem>
     
@@ -23,14 +23,14 @@
     
     const props = withDefaults(defineProps<{
         label: string,
-        modelValue: any,
         name: string,
-        type: string,
+        modelValue: any,
+        type?: string,
         placeholder?: string,
-        required: boolean,
-        autocomplete: boolean,
-        novalidate: boolean,
-        readonly: boolean
+        required?: boolean,
+        autocomplete?: string,
+        novalidate?: boolean,
+        readonly?: boolean
     }>(), {
         type: 'text'
     });

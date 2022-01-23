@@ -5,7 +5,7 @@
         <aside v-if="siblings.length" class="w-64 mr-10 shrink-0">
             <ul>
                 <li v-for="sibling in siblings">
-                    <router-link :to="{ name: sibling.name }" class="router-link">{{ sibling.meta.title }}</router-link>
+                    <router-link :to="{ name: sibling.name }" class="router-link">{{ sibling.meta?.title ?? sibling.name }}</router-link>
                 </li>
             </ul>
         </aside>

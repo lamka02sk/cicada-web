@@ -1,5 +1,6 @@
 import Auth from "./Auth";
 import axios from "axios";
+import {useGeneralStore} from "../../store/general";
 
 export default class Account extends Auth {
 
@@ -46,12 +47,32 @@ export default class Account extends Auth {
         }
     };
 
-    public async create() {
-        try {
-            return axios.post(`/setup/create-admin-account`, this.asObject());
-        } catch(e) {
-            return null;
+    public async create() : Promise<boolean> {
+
+        const valid = await this.validate();
+
+        if(!valid) {
+            return false;
         }
+
+        this._buttonStatus.display('loading',  'Creating account');
+
+        try {
+            await this.createAccount();
+        } catch(e) {
+            this._buttonStatus.display('error',  `${e}`);
+            return false;
+        }
+
+        this._buttonStatus.display('success',  'Success!');
+
+        useGeneralStore().resetServerStatus();
+        return true;
+
+    }
+
+    private createAccount() {
+        return axios.post(`/setup/create-admin-account`, this.asObject());
     }
 
 }

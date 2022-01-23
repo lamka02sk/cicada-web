@@ -1,7 +1,8 @@
-import axios, {AxiosError} from 'axios';
-import store from './vuex/main'
+import axios from 'axios';
 import Notification from "./models/system/Notification";
-import {Exception} from "sass";
+import {useAuthStore} from "./store/auth";
+import {useConfigStore} from "./store/config";
+import {useGeneralStore} from "./store/general";
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -9,22 +10,15 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.interceptors.request.use(
     config => {
 
-        const connectionConfig = store.getters['config/connectionConfig'] ?? null;
+        const connectionConfig = useConfigStore().connection;
+        const auth = useAuthStore();
 
-        if(!connectionConfig) {
-            return config;
-        }
-
-        const session = store.getters['auth/getSession'] ?? null;
-
-        if(session && config.headers) {
-            config.headers.Authorization = 'Bearer ' + session.token;
+        if(auth.authenticated && auth.session.token && config.headers) {
+            config.headers.Authorization = 'Bearer ' + auth.session.token;
         }
 
         config.baseURL = connectionConfig.getUrl();
         return config;
-
-    }, error => {
 
     }
 );
@@ -44,7 +38,7 @@ axios.interceptors.response.use(response => {
     }
 
     const notification = new Notification('error', 'Request failed', error, 10);
-    store.dispatch('system/pushNotification', notification);
+    useGeneralStore().pushNotification(notification);
 
     throw `${error.message.replace('Error: ', '')}`;
 

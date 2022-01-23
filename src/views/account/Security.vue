@@ -7,7 +7,7 @@
         <Form @submit="saveFormData">
             
             <FormRow>
-                <Number label="Automatic logout (days)" v-model="security" name="login_duration" min="1" max="365"></Number>
+                <Number label="Automatic logout (days)" v-model="security" name="login_duration" :min="1" :max="365"></Number>
             </FormRow>
             
             <FormRow>
@@ -64,10 +64,12 @@
     import Message from "../../components/notifications/Message.vue";
     import Alert from "../../components/notifications/Alert.vue";
     import Heading from "../../components/elements/Heading.vue";
+    import {useAuthStore} from "../../store/auth";
             
     const showResetTokenConfirmation = ref<boolean>(false);
     const store = useStore();
     const router = useRouter();
+    const auth = useAuthStore();
 
     store.dispatch('user/loadSecurity', true);
     const security = computed(() => <UserSecurity>store.getters['user/getSecurity']);
@@ -86,7 +88,7 @@
         
         try {
             await axios.get(`/user/token/refresh`);
-            await store.dispatch('auth/logout');
+            await auth.logout();
             await router.push({ name: 'auth_login' });
         } catch(_) {}
         

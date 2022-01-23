@@ -12,7 +12,7 @@
         </Label>
         <div class="relative w-full">
             <Validation :data="modelValue" :property="name" :novalidate="novalidate"></Validation>
-            <RequiredIndicator v-bind="{ required, modelValue }" v-if="!novalidate"></RequiredIndicator>
+            <RequiredIndicator v-bind="{ required, name, modelValue }" v-if="!novalidate"></RequiredIndicator>
         </div>
     </FormItem>
     
@@ -29,11 +29,11 @@
     
     const props = defineProps<{
         label: string,
-        modelValue: any,
         name: string,
-        required: boolean,
-        novalidate: boolean,
-        readonly: boolean
+        modelValue: any,
+        required?: boolean,
+        novalidate?: boolean,
+        readonly?: boolean
     }>();
     
     const emit = defineEmits(['update:modelValue']);

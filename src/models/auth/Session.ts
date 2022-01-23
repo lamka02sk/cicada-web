@@ -1,50 +1,37 @@
 import Auth from "./Auth";
 import axios from "axios";
-import {Commit} from "vuex";
+import {useAuthStore} from "../../store/auth";
 
 export default class Session extends Auth {
 
     private static _ls_key: string = 'session_token';
+    public readonly token: string|null = null;
 
-    active: boolean = false;
-    private readonly token: string|null = null;
-
-    public constructor(token: string) {
-
+    public constructor(token: string|null = null) {
         super();
-
-        this.active = false;
         this.token = token;
-
     }
 
-    public async checkSession(commit: Commit) : Promise<boolean> {
-
-        let response = null;
+    public async check() : Promise<boolean> {
 
         try {
-            response = await axios.get(`/auth/check`);
+            await axios.get(`/auth/check`);
+            localStorage.setItem(Session._ls_key, this.token ?? '');
+            return true;
         } catch(e) {}
 
-        if(!response?.data?.success || !this.token) {
-            commit('setSessionActive', false);
-            return false;
-        }
-
-        commit('setSessionActive', true);
-        localStorage.setItem(Session._ls_key, this.token);
-
-        return true;
+        await this.logout();
+        return false;
 
     }
 
-    public async logout() {
+    public async logout() : Promise<boolean> {
         try {
-            const result = await axios.get(`/auth/logout`);
+            await axios.get(`/auth/logout`);
             Session.forceLogout();
-            return result;
+            return true;
         } catch(e) {
-            return null;
+            return false;
         }
     }
 
@@ -52,7 +39,7 @@ export default class Session extends Auth {
         localStorage.removeItem(Session._ls_key);
     }
 
-    public static restore() {
+    public static async restore() {
 
         const token = localStorage.getItem(Session._ls_key);
 
@@ -60,7 +47,13 @@ export default class Session extends Auth {
             return null;
         }
 
-        return new Session(token);
+        const session = new Session(token);
+
+        const auth = useAuthStore();
+        auth.session = session;
+        auth.authenticated = true;
+
+        return await session.check() ? session : null;
 
     }
 

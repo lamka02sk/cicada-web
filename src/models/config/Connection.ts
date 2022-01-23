@@ -1,6 +1,7 @@
 import Config from "./Config";
 import axios from "axios";
 import rules from "../../validator/Rules";
+import Validator from "../../validator/Validator";
 
 export default class Connection extends Config {
 
@@ -25,37 +26,40 @@ export default class Connection extends Config {
     public port: number = 80;
     public path: string = '/';
 
-    public _valid: boolean = false;
-
-    getUrl() {
+    public getUrl() {
 
         if(!this.domain) {
-            return false;
+            return;
         }
 
         return `${this.protocol}://${this.domain}:${this.port}${this.path || ''}`.replace(/(\/)$/, '');
 
     }
 
-    async test() : Promise<boolean> {
+    public async test() : Promise<boolean> {
 
-        if(this._valid) {
-            return true;
-        }
+        const valid = await this.validate();
 
-        const url = this.getUrl();
-
-        if(!url) {
+        if(!valid) {
             return false;
         }
 
+        this._buttonStatus.display('loading',  'Checking');
+
         try {
-            const response = await axios.get(url + '/ping');
-            return this._valid = !!response.data?.success;
+            await this.ping();
         } catch(e) {
-            return this._valid = false;
+            this._buttonStatus.display('error',  `${e}`);
+            return false;
         }
 
+        this._buttonStatus.display('success',  'Success!');
+        return true;
+
+    }
+
+    private ping() {
+        return axios.get(this.getUrl() + '/ping')
     }
 
 }

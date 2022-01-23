@@ -34,7 +34,7 @@ export default class User extends Model {
         let response = null;
 
         try {
-            response = await axios.get(`/user/auth`);
+            response = await axios.get(`/user/authenticated`);
         } catch(e) {}
 
         if(!response?.data?.data?.user) {
@@ -58,7 +58,7 @@ export default class User extends Model {
         }
 
         try {
-            await axios.put(`/user/update/self`, this.asObject());
+            await axios.put(`/user/update`, this.asObject());
         } catch(e: any) {
             this._buttonStatus.display('error', `Error: ${e}`);
             return;

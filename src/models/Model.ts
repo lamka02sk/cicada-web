@@ -1,4 +1,5 @@
 import ButtonStatus from "./system/ButtonStatus";
+import Validator from "../validator/Validator";
 
 export default class Model {
 
@@ -19,12 +20,14 @@ export default class Model {
         }
     }
 
-    fromJSON(json: any) {
+    public fromJSON(json: any) {
 
         for(const key in this) {
             if(key.charAt(0) === '_' || !json.hasOwnProperty(key)) continue;
             this[key] = json[key];
         }
+
+        this._loaded = true;
 
     }
 
@@ -42,6 +45,15 @@ export default class Model {
 
         return data;
 
+    }
+
+    public isLoaded() {
+        return this._loaded;
+    }
+
+    public validate() {
+        const validator = new Validator(this);
+        return validator.validate();
     }
 
 }

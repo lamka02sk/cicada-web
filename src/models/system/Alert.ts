@@ -4,6 +4,8 @@ const defaultConfirmText = 'OK';
 
 export default class Alert extends Model {
 
+    private _destroyDelay: number = 300;
+
     public title: string = '';
     public dismissible: boolean = true;
     public confirmText: string = '';
@@ -19,6 +21,28 @@ export default class Alert extends Model {
         this.confirmText = confirmText;
         this.actionConfirm = actionConfirm;
         this.actionClose = actionClose;
+
+    }
+
+    public confirm() {
+
+        if(this.actionConfirm) {
+            this.actionConfirm(this.uuid);
+        }
+
+        this.dispatchEvent('confirm');
+        setTimeout(() => this.dispatchEvent('destroy'), this._destroyDelay);
+
+    }
+
+    public close() {
+
+        if(this.actionClose) {
+            this.actionClose(this.uuid);
+        }
+
+        this.dispatchEvent('close');
+        setTimeout(() => this.dispatchEvent('destroy'), this._destroyDelay);
 
     }
 

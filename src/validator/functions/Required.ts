@@ -1,4 +1,4 @@
-import Validator from "./Validator";
+import Validator from "./../Validator";
 
 export default class Required extends Validator {
 

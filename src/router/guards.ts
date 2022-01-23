@@ -1,37 +1,52 @@
 import {NavigationGuardNext, RouteLocationNormalized, Router} from "vue-router";
-import store from './../vuex/main'
-import Connection from "../models/config/Connection";
+import {useAuthStore} from "../store/auth";
+import {useConfigStore} from "../store/config";
 
 export function registerGuards(router: Router) {
 
     router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
 
         // Check configuration availability
-        const configuration: Connection = await store.dispatch('config/getConnectionConfig');
-        const validConfiguration = await configuration.test();
+        const configuration = useConfigStore().connection;
 
-        if(validConfiguration) {
+        if(!configuration.isLoaded()) {
+
+            await configuration.load();
+            const validConfiguration = await configuration.test();
+
+            if(validConfiguration) {
+
+                // Redirect to login from configuration
+                if (to.name === 'configure_connection') {
+                    return next({name: 'auth_login'});
+                }
+
+                // Force configuration route
+            } else if(to.name !== 'configure_connection') {
+                return next({name: 'configure_connection'});
+            }
+
+        } else {
 
             // Redirect to login from configuration
             if(to.name === 'configure_connection') {
                 return next({name: 'auth_login'});
             }
 
-        // Force configuration route
-        } else if(to.name !== 'configure_connection') {
-            return next({ name: 'configure_connection' });
         }
+
+        const auth = useAuthStore();
 
         // Logout
         if(to.name === 'auth_logout') {
-            await store.dispatch('auth/logout');
+            await auth.logout();
             return next({ name: 'auth_login' });
         }
 
         // Authenticate
-        if(to.meta?.auth && !(await store.dispatch('auth/signIn'))) {
+        if(to.meta?.auth && !(await auth.isSignedIn())) {
             return next({ name: 'auth_login' });
-        } else if(!to.meta?.auth && await store.dispatch('auth/signIn') && !from.meta?.auth) {
+        } else if(!to.meta?.auth && await auth.isSignedIn() && !from.meta?.auth) {
             return next({ name: 'dashboard' });
         }
 

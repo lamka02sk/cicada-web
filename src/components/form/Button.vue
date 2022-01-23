@@ -22,10 +22,9 @@
     import {computed, getCurrentInstance} from "vue";
     
     const props = withDefaults(defineProps<{
-        label: string,
-        value: any,
         disabled?: boolean,
-        type?: string,
+        value?: any,
+        type?: 'button'|'reset'|'submit',
         color?: string,
         statusType?: string,
         statusShow?: boolean,
@@ -33,7 +32,6 @@
         small?: boolean,
         right?: boolean
     }>(), {
-        value: null,
         type: 'button',
         color: 'indigo'
     });

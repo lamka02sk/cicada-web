@@ -31,7 +31,7 @@
             </FormRow>
             
         </Form>
-    
+
         <Form @submit="changePassword">
             
             <Heading tag="h2" class="mt-4">Change password</Heading>

@@ -35,7 +35,7 @@ export default class Validator {
             }
 
             // @ts-ignore
-            const vClass = await import('./' + validator.replace(/(^|\s)\S/g, c => c.toUpperCase()));
+            const vClass = await import('./functions/' + validator.replace(/(^|\s)\S/g, c => c.toUpperCase()) + '.ts');
             const v: any = new (vClass.default)(this.definition._validator[property][validator]);
 
             if(!v.isValid(this.definition[property], this.definition)) {

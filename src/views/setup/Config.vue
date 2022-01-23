@@ -12,7 +12,7 @@
         
         <p class="text-sm text-gray-800 text-center mb-6">Before using the cicada web UI, server connection needs to be configured on this device</p>
     
-        <Form v-if="configuration" @submit="checkConnection">
+        <Form v-if="configuration" @submit.prevent="checkConnection">
             <FormRow>
                 <Select label="Protocol" :options="protocolOptions" name="protocol" v-model="configuration" @update:modelValue="changePort"></Select>
             </FormRow>
@@ -26,10 +26,10 @@
                 <Text label="Path" name="path" v-model="configuration" required></Text>
             </FormRow>
             <FormRow center>
-                <Button type="submit" :disabled="submitDisabled" :status-type="status.type" :status-show="status && status.show">
+                <Button type="submit" :disabled="submitDisabled" :status-type="configuration._buttonStatus.type" :status-show="configuration._buttonStatus.show">
                     <slot>Check connection</slot>
                     <template v-slot:status>
-                        {{ status.label }}
+                        {{ configuration._buttonStatus.label }}
                     </template>
                 </Button>
             </FormRow>
@@ -37,7 +37,7 @@
         
     </ScreenCenter>
     
-    <Alert v-model:show="showAlert" type="danger" :close-button="false">
+    <Alert v-model:show="showAlert" type="danger">
         <template v-slot:title>Invalid data</template>
         Please check if all fields in the form are properly filled
     </Alert>
@@ -46,8 +46,7 @@
 
 <script setup lang="ts">
 
-    import {ref, watchEffect} from 'vue';
-    import {useStore} from 'vuex';
+    import {ref} from 'vue';
 
     import Logo from "./../../components/Logo.vue";
     import Message from "./../../components/notifications/Message.vue";
@@ -60,22 +59,14 @@
     import Button from "./../../components/form/Button.vue";
     import Connection from "../../models/config/Connection";
     import Alert from "../../components/notifications/Alert.vue";
-    import Validator from "../../validator/Validator";
     import {useRouter} from "vue-router";
-            
-    const store = useStore();
+    import {useConfigStore} from "../../store/config";
+    
     const router = useRouter();
-    const configuration = ref<Connection|null>(null);
-    
-    store.commit('config/setConnectionValidity', false);
-    
-    watchEffect(async () => {
-        configuration.value = <Connection>await store.dispatch('config/getConnectionConfig');
-    });
+    const configuration = useConfigStore().connection;
     
     const showAlert = ref<boolean>(false);
     const submitDisabled = ref<boolean>(false);
-    const status = ref<any>({});
             
     const protocolOptions = [
         { value: 'http', title: 'http://' },
@@ -83,63 +74,26 @@
     ];
     
     function changePort(value: Connection|null) {
-        if(configuration.value && value) {
-            configuration.value.port = value.protocol === 'http' ? 80 : 443;
+        if(configuration && value) {
+            configuration.port = value.protocol === 'http' ? 80 : 443;
         }
     }
     
     async function checkConnection() {
         
-        if(!configuration.value) {
-            return;
-        }
-        
-        submitDisabled.value = true;
-        const validator = new Validator(configuration.value);
-
-        if(!(await validator.validate())) {
+        if(!(await configuration.validate())) {
             showAlert.value = true;
-            submitDisabled.value = false;
             return;
         }
-        
-        status.value = {
-            type: 'loading',
-            show: true,
-            label: 'Connecting'
-        };
-        
-        if(await configuration.value.test()) {
-            
-            setTimeout(async () => {
-
-                status.value = {
-                    type: 'success',
-                    show: true,
-                    label: 'Successfully connected'
-                }
-                
-                store.commit('config/setConnectionValidity', true);
-                await store.dispatch('config/saveConnectionConfig');
-                await router.push({ name: 'auth_login' });
-                
-            }, 500)
-            
-        } else {
-            
-            setTimeout(() => {
-                
-                status.value = {
-                    type: 'error',
-                    show: true,
-                    label: 'Connection failed'
-                }
-                
-                submitDisabled.value = false;
-                
-            }, 500)
-            
+    
+        submitDisabled.value = true;
+    
+        if(await configuration.test()) {
+            configuration.save();
+            await router.push({ name: 'auth_login' });
         }
+    
+        submitDisabled.value = false;
         
     }
 

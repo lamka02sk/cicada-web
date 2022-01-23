@@ -27,12 +27,9 @@
 
     import Menu from "./views/Menu.vue";
     import Main from "./views/Main.vue";
-    import {useStore} from "vuex";
+    import {useAuthStore} from "./store/auth";
     import {computed} from "vue";
-            
-    const store = useStore();
-    const auth = computed(() => {
-        return store.getters["auth/hasSession"];
-    });
+    
+    const auth = computed(() => useAuthStore().authenticated);
 
 </script>
