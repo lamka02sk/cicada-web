@@ -1,5 +1,6 @@
 import Model from "../Model";
 import axios from "axios";
+import Alert from "../system/Alert";
 
 export default class PasswordChange extends Model {
 
@@ -34,7 +35,7 @@ export default class PasswordChange extends Model {
         const valid = await this.validate();
 
         if(!valid) {
-            // TODO > Alert
+            Alert.formValidation();
             return;
         }
 

@@ -1,5 +1,6 @@
 import Model from "../Model";
 import axios from "axios";
+import Alert from "../system/Alert";
 
 export default class User extends Model {
 
@@ -53,7 +54,7 @@ export default class User extends Model {
         const valid = await this.validate();
 
         if(!valid) {
-            // TODO > Alert
+            Alert.formValidation();
             return;
         }
 

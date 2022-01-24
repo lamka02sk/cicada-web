@@ -1,6 +1,6 @@
 <template>
     
-    <ScreenCenter class="h-full max-w-md w-full mx-auto md:px-12 px-4 py-8">
+    <ScreenCenter class="max-w-md w-full mx-auto md:px-12 px-4 py-8">
     
         <Logo large></Logo>
         <h1 class="text-xl text-gray-600 my-4 uppercase text-center">Create admin account</h1>

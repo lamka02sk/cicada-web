@@ -1,10 +1,20 @@
 import axios from "axios";
 import Model from "../Model";
+import Alert from "../system/Alert";
 
 export default class UserSecurity extends Model {
 
     public login_duration: number = 7;
     public two_factor: boolean = false;
+
+    public _validator = {
+        login_duration: {
+            required: true,
+            type: 'number',
+            min: 1,
+            max: 365
+        }
+    }
 
     public static async getSecurity() : Promise<UserSecurity | null> {
 
@@ -26,6 +36,14 @@ export default class UserSecurity extends Model {
     }
 
     public async update() {
+
+        const valid = await this.validate();
+
+        if(!valid) {
+            console.log('invalid');
+            Alert.formValidation();
+            return;
+        }
 
         this._buttonStatus.display('loading', 'Saving security settings');
 

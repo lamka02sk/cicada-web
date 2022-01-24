@@ -3,7 +3,7 @@
     <Menu v-if="auth"></Menu>
     <Main></Main>
     
-    <footer class="absolute mt-6 bottom-2 left-4 text-gray-300 hover:text-gray-400 duration-200 group text-sm flex right-4 justify-between">
+    <footer class="py-3 px-6 text-gray-300 hover:text-gray-400 duration-200 group text-sm flex justify-between">
         <div>
             Made with <span class="material-icons-outlined align-middle text-base">favorite_border</span> by
             <a class="text-slate-300 group-hover:hover:text-slate-500 group-hover:text-slate-400 duration-200"

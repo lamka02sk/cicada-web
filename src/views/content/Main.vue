@@ -1,6 +1,6 @@
 <template>
 
-    <div class="p-4">
+    <div class="p-4 grow">
         <div class="max-w-6xl w-full mx-auto relative">
         
             <div class="px-px text-sm text-slate-500">
