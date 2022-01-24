@@ -38,14 +38,14 @@
     
     <Empty v-else></Empty>
     
-    <Alert type="danger" v-model:show="showResetTokenConfirmation">
-        <template v-slot:title>Reset secure token</template>
-        Do you really wish to proceed with resetting your secure token?
-        <template v-slot:actions>
-            <Button color="mute" @click="showResetTokenConfirmation = false">Don't do anything</Button>
-            <Button color="red" @click="resetToken">Proceed</Button>
-        </template>
-    </Alert>
+<!--    <Alert type="danger" v-model:show="showResetTokenConfirmation">-->
+<!--        <template v-slot:title>Reset secure token</template>-->
+<!--        Do you really wish to proceed with resetting your secure token?-->
+<!--        <template v-slot:actions>-->
+<!--            <Button color="mute" @click="showResetTokenConfirmation = false">Don't do anything</Button>-->
+<!--            <Button color="red" @click="resetToken">Proceed</Button>-->
+<!--        </template>-->
+<!--    </Alert>-->
 
 </template>
 

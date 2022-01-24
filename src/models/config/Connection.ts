@@ -2,6 +2,7 @@ import Config from "./Config";
 import axios from "axios";
 import rules from "../../validator/Rules";
 import Validator from "../../validator/Validator";
+import Alert from "../system/Alert";
 
 export default class Connection extends Config {
 

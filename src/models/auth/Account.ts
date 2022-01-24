@@ -1,6 +1,7 @@
 import Auth from "./Auth";
 import axios from "axios";
 import {useGeneralStore} from "../../store/general";
+import Alert from "../system/Alert";
 
 export default class Account extends Auth {
 

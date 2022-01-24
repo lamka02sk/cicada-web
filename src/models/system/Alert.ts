@@ -1,4 +1,5 @@
 import Model from "../Model";
+import {useGeneralStore} from "../../store/general";
 
 const defaultConfirmText = 'OK';
 
@@ -6,44 +7,81 @@ export default class Alert extends Model {
 
     private _destroyDelay: number = 300;
 
+    public show: boolean = false;
+    public type: string = '';
     public title: string = '';
-    public dismissible: boolean = true;
-    public confirmText: string = '';
+    public description: string = '';
+
+    public showCloseButton: boolean = false;
+    public closeOverlay: boolean = false;
+
+    public cancelText: string|null = null;
+    public confirmText: string = defaultConfirmText;
+
     public actionConfirm: Function|null = null;
     public actionClose: Function|null = null;
+    public actionCancel: Function|null = null;
 
-    public constructor(title: string, dismissible: boolean = true, confirmText: string = defaultConfirmText, actionConfirm: Function|null = null, actionClose: Function|null = null) {
+    public constructor(
+        type: string,
+        title: string = '',
+        description: string = ''
+    ) {
 
         super();
 
+        this.type = type;
         this.title = title;
-        this.dismissible = dismissible;
-        this.confirmText = confirmText;
-        this.actionConfirm = actionConfirm;
-        this.actionClose = actionClose;
+        this.description = description;
 
     }
 
-    public confirm() {
+    public render() {
+        useGeneralStore().pushAlert(this);
+    }
 
-        if(this.actionConfirm) {
-            this.actionConfirm(this.uuid);
+    public confirm(alert: Alert) {
+
+        alert.show = false;
+
+        if(alert.actionConfirm) {
+            alert.actionConfirm(alert);
         }
 
-        this.dispatchEvent('confirm');
-        setTimeout(() => this.dispatchEvent('destroy'), this._destroyDelay);
+        alert.dispatchEvent('confirm');
+        setTimeout(() => alert.dispatchEvent('destroy'), alert._destroyDelay);
 
     }
 
-    public close() {
+    public close(alert: Alert) {
 
-        if(this.actionClose) {
-            this.actionClose(this.uuid);
+        alert.show = false;
+
+        if(alert.actionClose) {
+            alert.actionClose(alert);
         }
 
-        this.dispatchEvent('close');
-        setTimeout(() => this.dispatchEvent('destroy'), this._destroyDelay);
+        alert.dispatchEvent('close');
+        setTimeout(() => alert.dispatchEvent('destroy'), alert._destroyDelay);
 
+    }
+
+    public cancel(alert: Alert) {
+
+        alert.show = false;
+
+        if(alert.actionCancel) {
+            alert.actionCancel(alert);
+        }
+
+        alert.dispatchEvent('cancel');
+        setTimeout(() => alert.dispatchEvent('destroy'), alert._destroyDelay);
+
+    }
+
+    public static formValidation() {
+        const alert = new Alert('danger', 'Invalid form data', 'Please check if all fields in the form are properly filled');
+        alert.render();
     }
 
 }

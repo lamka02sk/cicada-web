@@ -2,20 +2,30 @@
 
     <teleport to="#alert">
     
-        <Overlay :show="!!show" @click="(closeOverlay) ? $emit('update:show', false) : () => {}">
+        <Overlay :show="!!alert.show" @click="alert.closeOverlay ? alert.close(alert) : () => {}">
+            
             <div @click.stop="() => {}" :class="`bg-white rounded-lg shadow-2xl max-w-sm w-full p-8 text-sm text-gray-800 duration-500 relative ${showClasses} ${border}`">
+                
                 <span class="material-icons-outlined cursor-pointer absolute top-4 right-4 text-gray-500 hover:text-red-600 duration-150"
-                      v-if="closeButton" @click="$emit('update:show', false)">cancel</span>
+                      v-if="alert.showCloseButton" @click="alert.close(alert)">cancel</span>
+                
                 <h2 :class="`text-xl font-semibold mb-4 pr-4 ${textColor}`">
                     <span class="material-icons-outlined align-middle mr-2" v-if="iconName">{{ iconName }}</span>
-                    <span class="align-middle"><slot name="title"></slot></span>
+                    <span class="align-middle"><slot name="title">{{ alert.title }}</slot></span>
                 </h2>
-                <slot></slot>
+                
+                <slot>{{ alert.description }}</slot>
+                
                 <div class="flex justify-between">
                     <slot name="actions"></slot>
-                    <Button color="gray" v-if="showDefaultAction" @click="$emit('update:show', false)">OK</Button>
+                    <template v-if="showDefaultActions">
+                        <Button v-if="alert.cancelText" color="mute" @click="alert.cancel(alert)">{{ alert.cancelText }}</Button>
+                        <Button color="gray" @click="alert.confirm(alert)">{{ alert.confirmText }}</Button>
+                    </template>
                 </div>
+                
             </div>
+            
         </Overlay>
     
     </teleport>
@@ -25,9 +35,10 @@
 <script setup lang="ts">
     
     import Overlay from "../layout/Overlay.vue";
-    import {computed, ref, useSlots, watchEffect} from "vue";
+    import {computed, onMounted, ref, useSlots, watchEffect} from "vue";
     
     import Button from "../form/Button.vue";
+    import Alert from "../../models/system/Alert";
 
     function getBorder(type: string) {
     
@@ -74,27 +85,18 @@
     
     }
     
-    const props = withDefaults(defineProps<{
-        show?: boolean,
-        type?: string,
-        closeButton?: boolean,
-        closeOverlay?: boolean
-    }>(), {
-        type: 'default'
-    });
+    const props = defineProps<{
+        alert: Alert
+    }>();
+    
+    onMounted(() => setTimeout(() => props.alert.show = true));
     
     const slots = useSlots();
-    const showDefaultAction = computed<boolean>(() => !slots.actions);
+    const showDefaultActions = computed<boolean>(() => !slots.actions);
     
-    const showClasses = computed<string>(() => props.show ? 'scale-100' : 'scale-75');
-    const border = computed<string>(() => getBorder(props.type));
-    const iconName = computed<string>(() => getIcon(props.type));
-    const textColor = computed<string>(() => getText(props.type));
+    const showClasses = computed<string>(() => props.alert.show ? 'scale-100' : 'scale-75');
+    const border = computed<string>(() => getBorder(props.alert.type));
+    const iconName = computed<string>(() => getIcon(props.alert.type));
+    const textColor = computed<string>(() => getText(props.alert.type));
 
 </script>
-
-<style lang="scss" scoped>
-
-
-
-</style>

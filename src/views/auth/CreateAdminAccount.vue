@@ -39,11 +39,6 @@
     
     </ScreenCenter>
     
-    <Alert v-model:show="showAlert" type="danger" close-overlay>
-        <template v-slot:title>Invalid data</template>
-        Please check if all fields in the form are properly filled
-    </Alert>
-    
 </template>
 
 <script setup lang="ts">
@@ -58,9 +53,9 @@
     import Text from "../../components/form/Text.vue";
     import Button from "../../components/form/Button.vue";
     import Password from "../../components/form/Password.vue";
-    import Alert from "../../components/notifications/Alert.vue";
     import Account from "../../models/auth/Account";
     import {useGeneralStore} from "../../store/general";
+    import Alert from "../../models/system/Alert";
     
     const router = useRouter();
     
@@ -71,13 +66,12 @@
     })();
     
     const formData = ref(new Account());
-    const showAlert = ref<boolean>(false);
     const submitDisabled = ref<boolean>(false);
     
     async function createAccount() {
 
         if(!(await formData.value.validate())) {
-            showAlert.value = true;
+            Alert.formValidation();
             return;
         }
     

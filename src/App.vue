@@ -21,6 +21,8 @@
         </div>
     </footer>
     
+    <Alerts></Alerts>
+    
 </template>
 
 <script setup lang="ts">
@@ -29,6 +31,7 @@
     import Main from "./views/Main.vue";
     import {useAuthStore} from "./store/auth";
     import {computed} from "vue";
+    import Alerts from "./views/content/Alerts.vue";
     
     const store = useAuthStore();
     const auth = computed(() => store.authenticated);

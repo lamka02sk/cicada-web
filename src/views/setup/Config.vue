@@ -37,11 +37,6 @@
         
     </ScreenCenter>
     
-    <Alert v-model:show="showAlert" type="danger">
-        <template v-slot:title>Invalid data</template>
-        Please check if all fields in the form are properly filled
-    </Alert>
-    
 </template>
 
 <script setup lang="ts">
@@ -58,14 +53,12 @@
     import Number from "./../../components/form/Number.vue";
     import Button from "./../../components/form/Button.vue";
     import Connection from "../../models/config/Connection";
-    import Alert from "../../components/notifications/Alert.vue";
     import {useRouter} from "vue-router";
     import {useConfigStore} from "../../store/config";
+    import Alert from "../../models/system/Alert";
     
     const router = useRouter();
     const configuration = useConfigStore().connection;
-    
-    const showAlert = ref<boolean>(false);
     const submitDisabled = ref<boolean>(false);
             
     const protocolOptions = [
@@ -82,7 +75,7 @@
     async function checkConnection() {
         
         if(!(await configuration.validate())) {
-            showAlert.value = true;
+            Alert.formValidation();
             return;
         }
     
